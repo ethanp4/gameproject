@@ -1,10 +1,10 @@
 namespace gameproject {
-    public partial class Form1 : Form {
+    public partial class GameForm : Form {
         System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
         const int framerate = 60;
         Game game;
         UI ui;
-        public Form1() {
+        public GameForm() {
             InitializeComponent();
             DoubleBuffered = true;
             Width = 800;
