@@ -40,7 +40,6 @@ namespace gameproject {
         }
     }
 
-
     public static class Game {
         public static void drawGame(Graphics g) {
             g.DrawEllipse(Pens.Aqua, new Rectangle(100, 100, 100, 100));
