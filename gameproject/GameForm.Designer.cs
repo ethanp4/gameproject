@@ -25,13 +25,14 @@
         private void InitializeComponent() {
             SuspendLayout();
             // 
-            // Form1
+            // GameForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Name = "Form1";
+            Name = "GameForm";
             Text = "Form1";
+            KeyDown += formKeyDown;
             MouseMove += formMouseMove;
             ResumeLayout(false);
         }
