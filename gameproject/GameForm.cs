@@ -60,7 +60,7 @@ namespace gameproject {
         public static void drawUI(Graphics g) {
             var info = $"{Game.posX} {Game.posY} {Game.dirX} {Game.dirY}";
             //g.DrawString("Mouse position: " + GameForm.mPos.ToString(), font, Brushes.Black, new Point(0,0));
-            //g.DrawString(info, font, Brushes.Black, new Point(0,0));
+            g.DrawString(info, font, Brushes.Black, new Point(0,0));
 
         }
     }
@@ -98,33 +98,87 @@ namespace gameproject {
           {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
         };
 
-        public static double posX = 22, posY = 12;  //x and y start position
+        public static double posX = 21.5, posY = 11.5;  //x and y start position, only ever modified by +/- 1
         public static double dirX = -1, dirY = 0; //initial direction vector
         public static double planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
 
         static double time = 0; //time of current frame
         static double oldTime = 0; //time of previous frame
         static double frameTime {  get { return (time - oldTime) / 1000f; } }
-        public static void rotate(bool dir) {
-            double rotSpeed = frameTime * 3.0;
+
+        private static System.Windows.Forms.Timer rotationTimer = new();
+        static Game()
+        {
+            rotationTimer.Interval = 16;
+            rotationTimer.Tick += rotationAnim;
+        }
+
+        private static double rotationAnimLength = 0.5;
+        private static bool rotationDir = false;
+        private static int rotationSteps = 20; //0.5 seconds at 60 fps
+        private static int rotationStepProgress = 0;
+        private static void rotationAnim(object sender, EventArgs e)
+        {
+            rotationStepProgress++;
+            if (rotationStepProgress == rotationSteps)
+            {
+                rotationStepProgress = 0;
+                rotationTimer.Stop();
+            }
             double oldDirX = dirX;
-            var intDir = dir ? 1 : -1;
-            dirX = dirX * Math.Cos(intDir * rotSpeed) - dirY * Math.Sin(intDir * rotSpeed);
-            dirY = oldDirX * Math.Sin(intDir * rotSpeed) + dirY * Math.Cos(intDir * rotSpeed);
+            var angleDifference = rotationDir ? 1.0 : -1.0;
+            angleDifference *= 90 * (Math.PI/180); //90 degrees in radians
+            angleDifference /= (double)rotationSteps;
+
+            dirX = dirX * Math.Cos(angleDifference) - dirY * Math.Sin(angleDifference);
+            dirY = oldDirX * Math.Sin(angleDifference) + dirY * Math.Cos(angleDifference);
             double oldPlaneX = planeX;
-            planeX = planeX * Math.Cos(intDir * rotSpeed) - planeY * Math.Sin(intDir * rotSpeed);
-            planeY = oldPlaneX * Math.Sin(intDir * rotSpeed) + planeY * Math.Cos(intDir * rotSpeed);
+            planeX = planeX * Math.Cos(angleDifference) - planeY * Math.Sin(angleDifference);
+            planeY = oldPlaneX * Math.Sin(angleDifference) + planeY * Math.Cos(angleDifference);
+        }
+
+        public static void rotate(bool dir) {
+            if (!rotationTimer.Enabled)
+            {
+                rotationDir = dir;
+                rotationTimer.Start();
+            }
+            //double oldDirX = dirX;
+            //var intDir = dir ? 1.0 : -1.0;
+            //intDir *= 1.5708; //90 degrees in radians
+            //dirX = dirX * Math.Cos(intDir) - dirY * Math.Sin(intDir);
+            //dirY = oldDirX * Math.Sin(intDir) + dirY * Math.Cos(intDir);
+            //double oldPlaneX = planeX;
+            //planeX = planeX * Math.Cos(intDir) - planeY * Math.Sin(intDir);
+            //planeY = oldPlaneX * Math.Sin(intDir) + planeY * Math.Cos(intDir);
         }
 
         public static void move(bool dir) {
+            if (rotationTimer.Enabled) //dont move if rotating
+            {
+                return;
+            }
             var intDir = dir ? 1 : -1;
-            double moveSpeed = frameTime * 5.0;
-            if (worldMap[Convert.ToInt32(posX + (intDir * dirX) * moveSpeed), Convert.ToInt32(posY)] == 0) {
-                posX += (intDir * dirX) * moveSpeed;
+            try
+            {
+                if (worldMap[Convert.ToInt32(posX + (intDir * dirX)), Convert.ToInt32(posY)] == 0)
+                {
+                    posX += (intDir * dirX);
+                }
+                if (worldMap[Convert.ToInt32(posX), Convert.ToInt32(posY + (intDir * dirY))] == 0)
+                {
+                    posY += (intDir * dirY);
+                }
             }
-            if (worldMap[Convert.ToInt32(posX), Convert.ToInt32(posY + (intDir * dirY) * moveSpeed)] == 0) {
-                posY += (intDir * dirY) * moveSpeed;
-            }
+            catch { } //sometimes this can index out of bounds
+
+            //double moveSpeed = frameTime * 5.0;
+            //if (worldMap[Convert.ToInt32(posX + (intDir * dirX) * moveSpeed), Convert.ToInt32(posY)] == 0) {
+            //    posX += (intDir * dirX) * moveSpeed;
+            //}
+            //if (worldMap[Convert.ToInt32(posX), Convert.ToInt32(posY + (intDir * dirY) * moveSpeed)] == 0) {
+            //    posY += (intDir * dirY) * moveSpeed;
+            //}
         }
 
         public static void drawGame(Graphics g) {
