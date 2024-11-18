@@ -68,37 +68,52 @@ namespace gameproject {
     public static class Game {
         const int width = GameForm.windowWidth;
         const int height = GameForm.windowHeight;
-        const int mapWidth = 24;
-        const int mapHeight = 24;
 
+        //const int mapWidth = 24;
+        //const int mapHeight = 24;
+        //static int[,] worldMap = {
+        //  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        //  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+        //  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+        //  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+        //  {1,0,0,0,0,0,2,2,2,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
+        //  {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
+        //  {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,3,0,0,0,3,0,0,0,1},
+        //  {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
+        //  {1,0,0,0,0,0,2,2,0,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
+        //  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+        //  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+        //  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+        //  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+        //  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+        //  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+        //  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+        //  {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+        //  {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+        //  {1,4,0,0,0,0,5,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+        //  {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+        //  {1,4,0,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+        //  {1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+        //  {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+        //  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+        //};
+
+        //const int mapWidth = 8;
+        //const int mapHeight = 6;
+        public static double posX = 4.5, posY = 5.5;
         static int[,] worldMap = {
-          {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-          {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-          {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-          {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-          {1,0,0,0,0,0,2,2,2,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
-          {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-          {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,3,0,0,0,3,0,0,0,1},
-          {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-          {1,0,0,0,0,0,2,2,0,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
-          {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-          {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-          {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-          {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-          {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-          {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-          {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-          {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-          {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-          {1,4,0,0,0,0,5,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-          {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-          {1,4,0,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-          {1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-          {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-          {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+            { 1,1,1,1,1,1,1,1,1,1,1 },
+            { 1,1,0,0,0,0,0,0,0,1,1 },
+            { 1,1,0,0,0,0,0,0,0,1,1 },
+            { 1,1,0,0,0,0,0,0,0,1,1 },
+            { 3,0,0,0,0,0,0,0,0,0,3 }, //4,4 - center
+            { 1,1,0,0,0,0,0,0,0,1,1 },
+            { 1,1,0,0,0,0,0,0,0,1,1 },
+            { 1,1,0,0,0,0,0,0,0,1,1 },
+            { 1,1,1,1,1,1,1,1,1,1,1 }
         };
-
-        public static double posX = 21.5, posY = 11.5;  //x and y start position, only ever modified by +/- 1
+        
+        //public static double posX = 21.5, posY = 11.5;  //x and y start position, only ever modified by +/- 1
         public static double dirX = -1, dirY = 0; //initial direction vector
         public static double planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
 
@@ -124,17 +139,40 @@ namespace gameproject {
             {
                 rotationStepProgress = 0;
                 rotationTimer.Stop();
+                //setAngle(rotationDir);
             }
-            double oldDirX = dirX;
+
             var angleDifference = rotationDir ? 1.0 : -1.0;
-            angleDifference *= 90 * (Math.PI/180); //90 degrees in radians
+
+            angleDifference *= 90 * (Math.PI / 180); //90 degrees in radians
             angleDifference /= (double)rotationSteps;
 
+            double oldDirX = dirX;
             dirX = dirX * Math.Cos(angleDifference) - dirY * Math.Sin(angleDifference);
             dirY = oldDirX * Math.Sin(angleDifference) + dirY * Math.Cos(angleDifference);
             double oldPlaneX = planeX;
             planeX = planeX * Math.Cos(angleDifference) - planeY * Math.Sin(angleDifference);
             planeY = oldPlaneX * Math.Sin(angleDifference) + planeY * Math.Cos(angleDifference);
+            
+        }
+
+        private static void setAngle(bool which) {
+            var idx = rotationDir ? 0 : 1;
+            var rotations = new Dictionary<int, int[]>() {
+               { 0, new[]{-1, 1 } },
+               { 1, new[]{1, -1 } }
+            };
+            int[] r = rotations[idx];
+
+            //double oldDirX = dirX;
+            //double oldPlaneX = planeX;
+
+        double odirX = -1, odirY = 0; //initial direction vector
+        double oplaneX = 0, oplaneY = 0.66; //the 2d raycaster version of camera plane
+        dirX = r[0];
+            dirY = r[1];
+            planeX = r[0];
+            planeY = r[1];
         }
 
         public static void rotate(bool dir) {
@@ -232,7 +270,8 @@ namespace gameproject {
                         mapY += stepY;
                         side = 1;
                     }
-                    if (worldMap[mapX,mapY] > 0) hit = 1;
+
+                    if (worldMap[mapX, mapY] > 0) hit = 1;
                 }
 
                 if (side == 0) perpWallDist = (sideDistX - deltaDistX);
