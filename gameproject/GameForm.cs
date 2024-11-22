@@ -58,9 +58,10 @@ namespace gameproject {
     public static class UI {
         private static Font font = new Font("Times New Roman", 16);
         public static void drawUI(Graphics g) {
-            var info = $"{Game.posX} {Game.posY} {Game.dirX} {Game.dirY}";
+            var info = $"{Game.posX} {Game.posY} {Game.dirX} {Game.dirY} {Game.planeX} {Game.planeY}";
             //g.DrawString("Mouse position: " + GameForm.mPos.ToString(), font, Brushes.Black, new Point(0,0));
             g.DrawString(info, font, Brushes.Black, new Point(0,0));
+
 
         }
     }
@@ -100,22 +101,26 @@ namespace gameproject {
 
         //const int mapWidth = 8;
         //const int mapHeight = 6;
-        public static double posX = 4.5, posY = 5.5;
+        public static double posX = 6.5, posY = 1.5;
         static int[,] worldMap = {
-            { 1,1,1,1,1,1,1,1,1,1,1 },
-            { 1,1,0,0,0,0,0,0,0,1,1 },
-            { 1,1,0,0,0,0,0,0,0,1,1 },
-            { 1,1,0,0,0,0,0,0,0,1,1 },
-            { 3,0,0,0,0,0,0,0,0,0,3 }, //4,4 - center
-            { 1,1,0,0,0,0,0,0,0,1,1 },
-            { 1,1,0,0,0,0,0,0,0,1,1 },
-            { 1,1,0,0,0,0,0,0,0,1,1 },
-            { 1,1,1,1,1,1,1,1,1,1,1 }
+            { 1,1,1,1,1,1,1,1,1,1,1,1,1 },
+            { 1,1,1,1,0,0,0,0,1,1,1,1,1 },
+            { 1,1,1,0,0,0,0,0,0,1,1,1,1 },
+            { 1,1,0,0,0,0,0,0,0,0,1,1,1 },
+            { 1,2,0,0,0,0,0,0,0,0,2,1,1 },
+            { 3,0,0,0,0,0,0,0,0,0,0,0,1 },
+            { 3,0,0,0,0,0,0,0,0,0,0,0,1 },
+            { 3,0,0,0,0,0,0,0,0,0,0,0,1 },
+            { 1,2,0,0,0,0,0,0,0,0,2,1,1 },
+            { 1,1,0,0,0,0,0,0,0,0,1,1,1 },
+            { 1,1,1,0,0,0,0,0,0,1,1,1,1 },
+            { 1,1,1,1,0,0,0,0,1,1,1,1,1 },
+            { 1,1,1,1,1,1,1,1,1,1,1,1,1 },
         };
         
         //public static double posX = 21.5, posY = 11.5;  //x and y start position, only ever modified by +/- 1
-        public static double dirX = -1, dirY = 0; //initial direction vector
-        public static double planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
+        public static double dirX = 0, dirY = 1; //initial direction vector
+        public static double planeX = 0.66, planeY = 0; //the 2d raycaster version of camera plane
 
         static double time = 0; //time of current frame
         static double oldTime = 0; //time of previous frame
@@ -157,25 +162,46 @@ namespace gameproject {
         }
 
         private static void setAngle(bool which) {
-            var idx = rotationDir ? 0 : 1;
-            var rotations = new Dictionary<int, int[]>() {
-               { 0, new[]{-1, 1 } },
-               { 1, new[]{1, -1 } }
-            };
-            int[] r = rotations[idx];
+            var dir = which ? 1 : -1;
 
-            //double oldDirX = dirX;
-            //double oldPlaneX = planeX;
+            var temp = dirX;
+            dirX = -dirY * dir;
+            dirY = temp * dir;
 
-        double odirX = -1, odirY = 0; //initial direction vector
-        double oplaneX = 0, oplaneY = 0.66; //the 2d raycaster version of camera plane
-        dirX = r[0];
-            dirY = r[1];
-            planeX = r[0];
-            planeY = r[1];
+            temp = planeX;
+            planeX = -planeY * dir;
+            planeY = temp * dir;
+            //if (dirY >= 0) {
+            //    dirX = dirY;
+            //} else {
+            //    dirX = -dirY;
+            //}
+            //if (dirX <= 0) {
+            //    dirY = -temp;
+            //} else {
+            //    dirY = temp;
+            //}
         }
+        //    var rotations = new Dictionary<int, int[]>() {
+        //       { 0, new[]{-1, 1 } },
+        //       { 1, new[]{1, -1 } }
+        //    };
+        //    int[] r = rotations[idx];
+
+        //    //double oldDirX = dirX;
+        //    //double oldPlaneX = planeX;
+
+        //double odirX = -1, odirY = 0; //initial direction vector
+        //double oplaneX = 0, oplaneY = 0.66; //the 2d raycaster version of camera plane
+        //dirX = r[0];
+        //    dirY = r[1];
+        //    planeX = r[0];
+        //    planeY = r[1];
+        //}
 
         public static void rotate(bool dir) {
+            setAngle(dir);
+            return;
             if (!rotationTimer.Enabled)
             {
                 rotationDir = dir;
@@ -223,6 +249,7 @@ namespace gameproject {
             oldTime = time;
             time = Environment.TickCount;
             //renderering code in this for loop taken from https://lodev.org/cgtutor/raycasting.html
+            g.FillRectangle(Brushes.Black, new Rectangle(0, 0, width, height)); //draw background black first
             for (int x = 0; x < width; x++) {
                 double cameraX = 2.0 * x / width - 1.0;
                 double rayDirX = dirX + planeX * cameraX;
