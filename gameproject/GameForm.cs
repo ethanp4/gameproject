@@ -1,5 +1,6 @@
 using System.Drawing;
 using System.Security.Principal;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace gameproject {
     public partial class GameForm : Form {
@@ -60,7 +61,7 @@ namespace gameproject {
         public static void drawUI(Graphics g) {
             var info = $"{Game.posX} {Game.posY} {Game.dirX} {Game.dirY} {Game.planeX} {Game.planeY}";
             //g.DrawString("Mouse position: " + GameForm.mPos.ToString(), font, Brushes.Black, new Point(0,0));
-            g.DrawString(info, font, Brushes.Black, new Point(0,0));
+            g.DrawString(info, font, Brushes.White, new Point(0,0));
 
 
         }
@@ -70,37 +71,21 @@ namespace gameproject {
         const int width = GameForm.windowWidth;
         const int height = GameForm.windowHeight;
 
-        //const int mapWidth = 24;
-        //const int mapHeight = 24;
-        //static int[,] worldMap = {
-        //  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        //  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        //  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        //  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        //  {1,0,0,0,0,0,2,2,2,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
-        //  {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        //  {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,3,0,0,0,3,0,0,0,1},
-        //  {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        //  {1,0,0,0,0,0,2,2,0,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
-        //  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        //  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        //  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        //  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        //  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        //  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        //  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        //  {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        //  {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        //  {1,4,0,0,0,0,5,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        //  {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        //  {1,4,0,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        //  {1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        //  {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        //  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
-        //};
 
-        //const int mapWidth = 8;
-        //const int mapHeight = 6;
+        private static Dictionary<int, double[]> dirSteps = new() {
+            { 0, new[]{ 0.0, 1.0 } },
+            { 1, new[]{ 1.0, 0.0 } },
+            { 2, new[]{ 0.0, -1.0} },
+            { 3, new[]{ -1.0, 0.0} },
+        };
+        private static Dictionary<int, double[]> planeSteps = new() {
+            { 0, new[]{ 0.66, 0.0 } },
+            { 1, new[]{ 0.0, -0.66 } },
+            { 2, new[]{ -0.66, 0.0} },
+            { 3, new[]{ 0.0, 0.66} },
+        };
+
+
         public static double posX = 6.5, posY = 1.5;
         static int[,] worldMap = {
             { 1,1,1,1,1,1,1,1,1,1,1,1,1 },
@@ -137,14 +122,17 @@ namespace gameproject {
         private static bool rotationDir = false;
         private static int rotationSteps = 20; //0.5 seconds at 60 fps
         private static int rotationStepProgress = 0;
+
+
         private static void rotationAnim(object sender, EventArgs e)
         {
             rotationStepProgress++;
+            double pct = (double)rotationStepProgress / (double)rotationSteps;
+            //lerpDir(pct); failed experiment
             if (rotationStepProgress == rotationSteps)
             {
                 rotationStepProgress = 0;
                 rotationTimer.Stop();
-                //setAngle(rotationDir);
             }
 
             var angleDifference = rotationDir ? 1.0 : -1.0;
@@ -158,63 +146,37 @@ namespace gameproject {
             double oldPlaneX = planeX;
             planeX = planeX * Math.Cos(angleDifference) - planeY * Math.Sin(angleDifference);
             planeY = oldPlaneX * Math.Sin(angleDifference) + planeY * Math.Cos(angleDifference);
-            
+
         }
 
-        private static void setAngle(bool which) {
-            var dir = which ? 1 : -1;
+        //"pre rotate vectors"; required to interpolate between them
+        private static double[] prv = { dirX, dirY, planeX, planeY }; //start with default values
+        private static void lerpDir(double t) {
+            var dir = rotationDir ? 1.0 : -1.0;
+            //dirX, dirY, planeX, planeY
+            double[] rotated = { -prv[1] * dir, prv[0] * dir, -prv[3] * dir, prv[2] * dir};
 
-            var temp = dirX;
-            dirX = -dirY * dir;
-            dirY = temp * dir;
+            dirX = (1 - t) * prv[0] + t * rotated[0];
+            dirY = (1 - t) * prv[1] + t * rotated[1];
+            planeX = (1 - t) * prv[2] + t * rotated[2];
+            planeY = (1 - t) * prv[3] + t * rotated[3];
 
-            temp = planeX;
-            planeX = -planeY * dir;
-            planeY = temp * dir;
-            //if (dirY >= 0) {
-            //    dirX = dirY;
-            //} else {
-            //    dirX = -dirY;
-            //}
-            //if (dirX <= 0) {
-            //    dirY = -temp;
-            //} else {
-            //    dirY = temp;
-            //}
+            //var interpX = (1 - t) * originalX + t * rotatedX;
+            //var interpY = (1 - t) * originalY + t * rotatedY;
         }
-        //    var rotations = new Dictionary<int, int[]>() {
-        //       { 0, new[]{-1, 1 } },
-        //       { 1, new[]{1, -1 } }
-        //    };
-        //    int[] r = rotations[idx];
-
-        //    //double oldDirX = dirX;
-        //    //double oldPlaneX = planeX;
-
-        //double odirX = -1, odirY = 0; //initial direction vector
-        //double oplaneX = 0, oplaneY = 0.66; //the 2d raycaster version of camera plane
-        //dirX = r[0];
-        //    dirY = r[1];
-        //    planeX = r[0];
-        //    planeY = r[1];
-        //}
 
         public static void rotate(bool dir) {
-            setAngle(dir);
-            return;
+            //setAngle(dir);
+            //return;
             if (!rotationTimer.Enabled)
             {
+                prv[0] = dirX;
+                prv[1] = dirY;
+                prv[2] = planeX;
+                prv[3] = planeY;
                 rotationDir = dir;
                 rotationTimer.Start();
             }
-            //double oldDirX = dirX;
-            //var intDir = dir ? 1.0 : -1.0;
-            //intDir *= 1.5708; //90 degrees in radians
-            //dirX = dirX * Math.Cos(intDir) - dirY * Math.Sin(intDir);
-            //dirY = oldDirX * Math.Sin(intDir) + dirY * Math.Cos(intDir);
-            //double oldPlaneX = planeX;
-            //planeX = planeX * Math.Cos(intDir) - planeY * Math.Sin(intDir);
-            //planeY = oldPlaneX * Math.Sin(intDir) + planeY * Math.Cos(intDir);
         }
 
         public static void move(bool dir) {
@@ -225,24 +187,16 @@ namespace gameproject {
             var intDir = dir ? 1 : -1;
             try
             {
-                if (worldMap[Convert.ToInt32(posX + (intDir * dirX)), Convert.ToInt32(posY)] == 0)
+                if (worldMap[Convert.ToInt32(posX-.5 + (intDir * dirX)), Convert.ToInt32(posY-.5)] == 0)
                 {
                     posX += (intDir * dirX);
                 }
-                if (worldMap[Convert.ToInt32(posX), Convert.ToInt32(posY + (intDir * dirY))] == 0)
+                if (worldMap[Convert.ToInt32(posX-.5), Convert.ToInt32(posY-.5 + (intDir * dirY))] == 0)
                 {
                     posY += (intDir * dirY);
                 }
             }
             catch { } //sometimes this can index out of bounds
-
-            //double moveSpeed = frameTime * 5.0;
-            //if (worldMap[Convert.ToInt32(posX + (intDir * dirX) * moveSpeed), Convert.ToInt32(posY)] == 0) {
-            //    posX += (intDir * dirX) * moveSpeed;
-            //}
-            //if (worldMap[Convert.ToInt32(posX), Convert.ToInt32(posY + (intDir * dirY) * moveSpeed)] == 0) {
-            //    posY += (intDir * dirY) * moveSpeed;
-            //}
         }
 
         public static void drawGame(Graphics g) {
