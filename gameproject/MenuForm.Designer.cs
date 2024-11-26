@@ -22,46 +22,40 @@
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent() {
-            label1 = new Label();
-            btnStartGame = new Button();
+        private void InitializeComponent()
+        {
+            StartButton = new PictureBox();
+            ((System.ComponentModel.ISupportInitialize)StartButton).BeginInit();
             SuspendLayout();
             // 
-            // label1
+            // StartButton
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(163, 152);
-            label1.Name = "label1";
-            label1.Size = new Size(30, 20);
-            label1.TabIndex = 0;
-            label1.Text = "ola";
-            // 
-            // btnStartGame
-            // 
-            btnStartGame.Location = new Point(216, 228);
-            btnStartGame.Name = "btnStartGame";
-            btnStartGame.Size = new Size(94, 29);
-            btnStartGame.TabIndex = 1;
-            btnStartGame.Text = "start game";
-            btnStartGame.UseVisualStyleBackColor = true;
-            btnStartGame.Click += btnStartGame_Click;
+            StartButton.Anchor = AnchorStyles.None;
+            StartButton.Image = Properties.Resources.StartButton;
+            StartButton.Location = new Point(320, 233);
+            StartButton.Name = "StartButton";
+            StartButton.Size = new Size(171, 64);
+            StartButton.SizeMode = PictureBoxSizeMode.StretchImage;
+            StartButton.TabIndex = 0;
+            StartButton.TabStop = false;
+            StartButton.Click += StartButton_Click;
             // 
             // MenuForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.ActiveCaptionText;
             ClientSize = new Size(800, 450);
-            Controls.Add(btnStartGame);
-            Controls.Add(label1);
+            Controls.Add(StartButton);
             Name = "MenuForm";
-            Text = "MenuForm";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "UltimateDelusion";
+            ((System.ComponentModel.ISupportInitialize)StartButton).EndInit();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
 
-        private Label label1;
-        private Button btnStartGame;
+        private PictureBox StartButton;
     }
 }
