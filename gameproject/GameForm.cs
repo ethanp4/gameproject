@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Drawing;
 using System.Security.Principal;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -71,56 +72,118 @@ namespace gameproject {
         const int width = GameForm.windowWidth;
         const int height = GameForm.windowHeight;
 
+        //unused for now
+        //private static Dictionary<int, double[]> dirSteps = new() {
+        //    { 0, new[]{ 0.0, 1.0 } },
+        //    { 1, new[]{ 1.0, 0.0 } },
+        //    { 2, new[]{ 0.0, -1.0} },
+        //    { 3, new[]{ -1.0, 0.0} },
+        //};
+        //private static Dictionary<int, double[]> planeSteps = new() {
+        //    { 0, new[]{ 0.66, 0.0 } },
+        //    { 1, new[]{ 0.0, -0.66 } },
+        //    { 2, new[]{ -0.66, 0.0} },
+        //    { 3, new[]{ 0.0, 0.66} },
+        //};
 
-        private static Dictionary<int, double[]> dirSteps = new() {
-            { 0, new[]{ 0.0, 1.0 } },
-            { 1, new[]{ 1.0, 0.0 } },
-            { 2, new[]{ 0.0, -1.0} },
-            { 3, new[]{ -1.0, 0.0} },
-        };
-        private static Dictionary<int, double[]> planeSteps = new() {
-            { 0, new[]{ 0.66, 0.0 } },
-            { 1, new[]{ 0.0, -0.66 } },
-            { 2, new[]{ -0.66, 0.0} },
-            { 3, new[]{ 0.0, 0.66} },
-        };
 
-
-        public static double posX = 5.5, posY = 1.5;
-        static int[,] worldMap = {
-            { 1,1,1,1,1,1,1,1,1,1,1,1,1 },
-            { 1,1,1,0,0,0,0,0,0,1,1,1,1 },
-            { 1,1,0,0,0,0,0,0,0,0,1,1,1 },
-            { 1,2,0,0,0,0,0,0,0,0,2,1,1 },
-            { 3,0,0,0,0,0,0,0,0,0,0,0,1 },
-            { 3,0,0,0,0,0,0,0,0,0,0,0,1 },
-            { 3,0,0,0,0,0,0,0,0,0,0,0,1 },
-            { 1,2,0,0,0,0,0,0,0,0,2,1,1 },
-            { 1,1,0,0,0,0,0,0,0,0,1,1,1 },
-            { 1,1,1,0,0,0,0,0,0,1,1,1,1 },
-            { 1,1,1,1,1,1,1,1,1,1,1,1,1 },
-        };
-        
         //public static double posX = 21.5, posY = 11.5;  //x and y start position, only ever modified by +/- 1
         public static double dirX = 0, dirY = 1; //initial direction vector
         public static double planeX = 0.66, planeY = 0; //the 2d raycaster version of camera plane
 
         static double time = 0; //time of current frame
         static double oldTime = 0; //time of previous frame
-        static double frameTime {  get { return (time - oldTime) / 1000f; } }
+        static double frameTime {  get { return (time - oldTime) / 1000f; } } //currently unused
 
+        //setup rotation
         private static System.Windows.Forms.Timer rotationTimer = new();
         static Game()
         {
             rotationTimer.Interval = 16;
             rotationTimer.Tick += rotationAnim;
         }
-
-        private static double rotationAnimLength = 0.5;
+        //private static double rotationAnimLength = 0.5;
         private static bool rotationDir = false;
         private static int rotationSteps = 20; //0.5 seconds at 60 fps
         private static int rotationStepProgress = 0;
+        
+        //actually important stuff
+        public static double spawnX = 5.5, spawnY = 1.5;
+        public static double posX = spawnX, posY = spawnY;
+        static int[,] worldMap = { //-1 is the goal
+            { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
+            { 1,1,1,0,0,0,0,0,0,0,0,1,1,1,1 },
+            { 1,1,0,0,0,0,0,0,0,0,0,0,1,1,1 },
+            { 1,1,0,0,0,0,0,0,0,0,0,0,1,1,1 },
+            { 1,0,0,0,0,0,0,0,0,0,0,0,0,-1,1 },
+            { 1,0,0,0,0,0,0,0,0,0,0,0,0,-1,1 },
+            { 1,0,0,0,0,0,0,0,0,0,0,0,0,-1,1 },
+            { 1,1,0,0,0,0,0,0,0,0,0,0,1,1,1 },
+            { 1,1,0,0,0,0,0,0,0,0,0,0,1,1,1 },
+            { 1,1,1,0,0,0,0,0,0,0,0,1,1,1,1 },
+            { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
+        };
 
+        //first index is stage
+        //first value in each is the background color, then each number within the map
+        //private static Color[][] stageColors =
+        //{ 
+        //    new Color[]{ Color.Black, Color.DarkGray },
+        //    new Color[]{ Color.DarkBlue , Color.DarkGray },
+        //    new Color[]{ Color.Black, Color.DarkGray },
+        //    new Color[]{ Color.Black, Color.DarkGray }
+        //};
+        //ai generated colours
+
+        private static Color[][] stageColors = new Color[][]
+        {
+            // Stage 0
+            new Color[]
+            {
+                Color.FromArgb(24, 5, 26),        // Background: Black
+                Color.FromArgb(255, 0, 0),      // Wall: Red
+                Color.FromArgb(0, 255, 255),    // Accent 1: Cyan
+                Color.FromArgb(255, 255, 0)     // Accent 2: Yellow
+            },
+    
+            // Stage 1
+            new Color[]
+            {
+                Color.FromArgb(0, 25, 25),  // Background: White
+                Color.FromArgb(0, 0, 255),      // Wall: Blue
+                Color.FromArgb(255, 165, 0),    // Accent 1: Orange
+                Color.FromArgb(255, 105, 180)   // Accent 2: HotPink
+            },
+    
+            // Stage 2
+            new Color[]
+            {
+                Color.FromArgb(34, 34, 34),     // Background: Dark Gray
+                Color.FromArgb(0, 128, 0),      // Wall: Green
+                Color.FromArgb(255, 20, 147),   // Accent 1: Deep Pink
+                Color.FromArgb(240, 230, 140)   // Accent 2: Khaki
+            },
+    
+            // Stage 3
+            new Color[]
+            {
+                Color.FromArgb(30, 0, 30),        // Background: Black
+                Color.FromArgb(255, 165, 0),    // Wall: Orange
+                Color.FromArgb(75, 0, 130),     // Accent 1: Indigo
+                Color.FromArgb(255, 20, 147)    // Accent 2: Deep Pink
+            },
+    
+            // Stage 4
+            new Color[]
+            {
+                Color.FromArgb(0, 100, 100),    // Background: Cyan
+                Color.FromArgb(255, 0, 255),    // Wall: Magenta
+                Color.FromArgb(0, 128, 128),    // Accent 1: Teal
+                Color.FromArgb(255, 105, 180)   // Accent 2: HotPink
+            }
+        };
+
+        public static int currentStage { get; private set; } = 0; //can be read by ui class
 
         private static void rotationAnim(object sender, EventArgs e)
         {
@@ -185,23 +248,31 @@ namespace gameproject {
             var intDir = dir ? 1 : -1;
             try
             {
-                if (worldMap[Convert.ToInt32(posX-.5 + (intDir * dirX)), Convert.ToInt32(posY-.5)] == 0)
+                if (worldMap[Convert.ToInt32(posX-.5 + (intDir * dirX)), Convert.ToInt32(posY-.5)] <= 0) //values below zero will have no collision
                 {
                     posX += (intDir * dirX);
                 }
-                if (worldMap[Convert.ToInt32(posX-.5), Convert.ToInt32(posY-.5 + (intDir * dirY))] == 0)
+                if (worldMap[Convert.ToInt32(posX-.5), Convert.ToInt32(posY-.5 + (intDir * dirY))] <= 0)
                 {
                     posY += (intDir * dirY);
                 }
             }
-            catch { } //sometimes this can index out of bounds
+            catch { Debug.WriteLine("index out of bounds in move()"); } 
+            if (worldMap[(int)posX, (int)posY] == -1)
+            {
+                posX = spawnX; posY = spawnY;
+                currentStage++;
+            }
         }
 
         public static void drawGame(Graphics g) {
             oldTime = time;
             time = Environment.TickCount;
             //renderering code in this for loop taken from https://lodev.org/cgtutor/raycasting.html
-            g.FillRectangle(Brushes.Black, new Rectangle(0, 0, width, height)); //draw background black first
+            var currentStageColors = stageColors[currentStage % stageColors.Length];
+            g.FillRectangle(new SolidBrush(currentStageColors[0]), new Rectangle(0, 0, width, height)); //draw background first
+
+            //draw lines
             for (int x = 0; x < width; x++) {
                 double cameraX = 2.0 * x / width - 1.0;
                 double rayDirX = dirX + planeX * cameraX;
@@ -249,8 +320,10 @@ namespace gameproject {
                         mapY += stepY;
                         side = 1;
                     }
-
-                    if (worldMap[mapX, mapY] > 0) hit = 1;
+                    try
+                    {
+                        if (worldMap[mapX, mapY] > 0) hit = 1;
+                    } catch { Debug.WriteLine("index out of bounds in while(hit == 0)"); hit = 1; }
                 }
 
                 if (side == 0) perpWallDist = (sideDistX - deltaDistX);
@@ -263,14 +336,14 @@ namespace gameproject {
                 int drawEnd = lineHeight / 2 + height / 2;
                 if (drawEnd >= height) drawEnd = height - 1;
 
-                Color color;
-                switch (worldMap[mapX,mapY]) {
-                    case 1: color = Color.Red; break; 
-                    case 2: color = Color.Green; break; 
-                    case 3: color = Color.Blue; break; 
-                    case 4: color = Color.White; break; 
-                    default: color = Color.Yellow; break; 
-                }
+                Color color = currentStageColors[worldMap[mapX, mapY]];
+                //switch (worldMap[mapX,mapY]) {
+                //    case 1: color = currentStageColors[1]; break; 
+                //    case 2: color = currentStageColors[1]; break; 
+                //    case 3: color = currentStageColors[1]; break; 
+                //    case 4: color = Color.White; break; 
+                //    default: color = Color.Yellow; break; 
+                //}
 
                 //give x and y sides different brightness
                 if (side == 1) { color = Color.FromArgb(color.R / 2, color.G / 2, color.B / 2); }
