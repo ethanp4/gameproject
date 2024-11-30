@@ -123,7 +123,7 @@ namespace gameproject {
             { 1,1,1,0,0,0,0,0,0,0,0,1,1,1,1 },
             { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
         };
-
+ 
         //first index is stage
         //first value in each is the background color, then each number within the map
         //private static Color[][] stageColors =
