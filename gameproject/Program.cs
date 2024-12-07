@@ -9,7 +9,6 @@ namespace gameproject {
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             Application.Run(new MenuForm());
-            //Application.Run(new GameForm());
         }
     }
 }

@@ -210,31 +210,31 @@ namespace gameproject {
 
         }
 
-        //"pre rotate vectors"; required to interpolate between them
-        private static double[] prv = { dirX, dirY, planeX, planeY }; //start with default values
-        private static void lerpDir(double t) {
-            var dir = rotationDir ? 1.0 : -1.0;
-            //dirX, dirY, planeX, planeY
-            double[] rotated = { -prv[1] * dir, prv[0] * dir, -prv[3] * dir, prv[2] * dir};
+        ////"pre rotate vectors"; required to interpolate between them
+        //private static double[] prv = { dirX, dirY, planeX, planeY }; //start with default values
+        //private static void lerpDir(double t) {
+        //    var dir = rotationDir ? 1.0 : -1.0;
+        //    //dirX, dirY, planeX, planeY
+        //    double[] rotated = { -prv[1] * dir, prv[0] * dir, -prv[3] * dir, prv[2] * dir};
 
-            dirX = (1 - t) * prv[0] + t * rotated[0];
-            dirY = (1 - t) * prv[1] + t * rotated[1];
-            planeX = (1 - t) * prv[2] + t * rotated[2];
-            planeY = (1 - t) * prv[3] + t * rotated[3];
+        //    dirX = (1 - t) * prv[0] + t * rotated[0];
+        //    dirY = (1 - t) * prv[1] + t * rotated[1];
+        //    planeX = (1 - t) * prv[2] + t * rotated[2];
+        //    planeY = (1 - t) * prv[3] + t * rotated[3];
 
-            //var interpX = (1 - t) * originalX + t * rotatedX;
-            //var interpY = (1 - t) * originalY + t * rotatedY;
-        }
+        //    //var interpX = (1 - t) * originalX + t * rotatedX;
+        //    //var interpY = (1 - t) * originalY + t * rotatedY;
+        //}
 
         public static void rotate(bool dir) {
             //setAngle(dir);
             //return;
             if (!rotationTimer.Enabled)
             {
-                prv[0] = dirX;
-                prv[1] = dirY;
-                prv[2] = planeX;
-                prv[3] = planeY;
+                //prv[0] = dirX;
+                //prv[1] = dirY;
+                //prv[2] = planeX;
+                //prv[3] = planeY;
                 rotationDir = dir;
                 rotationTimer.Start();
             }
