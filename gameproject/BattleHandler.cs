@@ -15,7 +15,7 @@ namespace gameproject
             Game.gameState = Game.STATE.BATTLE;
         }
 
-        public void playerChoice() //player chooses what to do, that is passed in as a parameter, then the enemy attacks
+        public void playerChoice(string choice) //player chooses what to do, that is passed in as a parameter, then the enemy attacks
         {
 
         }
