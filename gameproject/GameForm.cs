@@ -11,6 +11,8 @@ namespace gameproject {
         public const int windowWidth = 1440;
         public const int windowHeight = 1080;
 
+        public static Font font = new Font("Comic Sans MS", 16);
+
         public GameForm() {
             InitializeComponent();
             DoubleBuffered = true;
@@ -22,49 +24,58 @@ namespace gameproject {
             timer.Interval = (int)Math.Floor(1f / (float)framerate * 1000f); // frametime for 60 fps
             timer.Tick += invalidateTimer;
             timer.Start();
+            currentState = STATE.BATTLE;
         }
 
         private void invalidateTimer(object sender, EventArgs e) {
             Invalidate(); //repaint once every 16 ms for 60 fps
         }
 
+        static BattleUI battle = new BattleUI();
         protected override void OnPaint(PaintEventArgs e) {
             var g = e.Graphics; // graphics object to draw with
             Game.drawGame(g);
             UI.drawUI(g);
-            //base.OnPaint(e); // idk if this is needed
+            BattleUI.instance.drawUI(g);
         }
 
         private void formMouseMove(object sender, MouseEventArgs e) {
             mPos = e.Location; //this needs to be set from here in order to get the local position
         }
 
-        private void formKeyDown(object sender, KeyEventArgs e) {
-            switch (e.KeyCode) {
-                case Keys.Right:
-                    Game.rotate(false);
+        public enum STATE { FREE_MOVEMENT, BATTLE } 
+        public static STATE currentState { get; private set; } = STATE.FREE_MOVEMENT;
+        private void formKeyDown(object sender, KeyEventArgs e) { //keyboard input handler, this game is keyboard only
+            switch (currentState)
+            {
+                case STATE.FREE_MOVEMENT:
+                    switch (e.KeyCode) {
+                        case Keys.Right:
+                            Game.rotate(false);
+                            break;
+                        case Keys.Left:
+                            Game.rotate(true);
+                            break;
+                        case Keys.Up:
+                            Game.move(true);
+                            break;
+                        case Keys.Down:
+                            Game.move(false);
+                            break;
+                    }
                     break;
-                case Keys.Left:
-                    Game.rotate(true);
-                    break;
-                case Keys.Up:
-                    Game.move(true);
-                    break;
-                case Keys.Down:
-                    Game.move(false);
+                case STATE.BATTLE:
+                    BattleUI.instance.handleInput(e);
                     break;
             }
         }
     }
 
     public static class UI {
-        private static Font font = new Font("Times New Roman", 16);
         public static void drawUI(Graphics g) {
             var info = $"{Game.posX} {Game.posY} {Game.dirX} {Game.dirY} {Game.planeX} {Game.planeY}";
             //g.DrawString("Mouse position: " + GameForm.mPos.ToString(), font, Brushes.Black, new Point(0,0));
-            g.DrawString(info, font, Brushes.White, new Point(0,0));
-
-
+            g.DrawString(info, GameForm.font, Brushes.White, new Point(0,0));
         }
     }
 
@@ -111,29 +122,18 @@ namespace gameproject {
         public static double spawnX = 5.5, spawnY = 1.5;
         public static double posX = spawnX, posY = spawnY;
         static int[,] worldMap = { //-1 is the goal
-            { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
-            { 1,1,1,0,0,0,0,0,0,0,0,1,1,1,1 },
-            { 1,1,0,0,0,0,0,0,0,0,0,0,1,1,1 },
-            { 1,1,0,0,0,0,0,0,0,0,0,0,1,1,1 },
-            { 1,0,0,0,0,0,0,0,0,0,0,0,0,-1,1 },
-            { 1,0,0,0,0,0,0,0,0,0,0,0,0,-1,1 },
-            { 1,0,0,0,0,0,0,0,0,0,0,0,0,-1,1 },
-            { 1,1,0,0,0,0,0,0,0,0,0,0,1,1,1 },
-            { 1,1,0,0,0,0,0,0,0,0,0,0,1,1,1 },
-            { 1,1,1,0,0,0,0,0,0,0,0,1,1,1,1 },
-            { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
+            { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
+            { 1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1 },
+            { 1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1 },
+            { 1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1 },
+            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,1 },
+            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,1 },
+            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,1 },
+            { 1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1 },
+            { 1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1 },
+            { 1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1 },
+            { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
         };
- 
-        //first index is stage
-        //first value in each is the background color, then each number within the map
-        //private static Color[][] stageColors =
-        //{ 
-        //    new Color[]{ Color.Black, Color.DarkGray },
-        //    new Color[]{ Color.DarkBlue , Color.DarkGray },
-        //    new Color[]{ Color.Black, Color.DarkGray },
-        //    new Color[]{ Color.Black, Color.DarkGray }
-        //};
-        //ai generated colours
 
         private static Color[][] stageColors = new Color[][]
         {
@@ -210,37 +210,18 @@ namespace gameproject {
 
         }
 
-        ////"pre rotate vectors"; required to interpolate between them
-        //private static double[] prv = { dirX, dirY, planeX, planeY }; //start with default values
-        //private static void lerpDir(double t) {
-        //    var dir = rotationDir ? 1.0 : -1.0;
-        //    //dirX, dirY, planeX, planeY
-        //    double[] rotated = { -prv[1] * dir, prv[0] * dir, -prv[3] * dir, prv[2] * dir};
-
-        //    dirX = (1 - t) * prv[0] + t * rotated[0];
-        //    dirY = (1 - t) * prv[1] + t * rotated[1];
-        //    planeX = (1 - t) * prv[2] + t * rotated[2];
-        //    planeY = (1 - t) * prv[3] + t * rotated[3];
-
-        //    //var interpX = (1 - t) * originalX + t * rotatedX;
-        //    //var interpY = (1 - t) * originalY + t * rotatedY;
-        //}
-
         public static void rotate(bool dir) {
             //setAngle(dir);
             //return;
             if (!rotationTimer.Enabled)
             {
-                //prv[0] = dirX;
-                //prv[1] = dirY;
-                //prv[2] = planeX;
-                //prv[3] = planeY;
                 rotationDir = dir;
                 rotationTimer.Start();
             }
         }
 
         public static void move(bool dir) {
+            var prevPos = new Point((int)posX, (int)posY);
             if (rotationTimer.Enabled) //dont move if rotating
             {
                 return;
@@ -263,7 +244,30 @@ namespace gameproject {
                 posX = spawnX; posY = spawnY;
                 currentStage++;
             }
+            if (new Point((int)posX, (int) posY) != prevPos)
+            {
+                considerSpawningEnemy();
+            }
         }
+        static Random random = new Random();
+        public static void considerSpawningEnemy() { 
+            if (random.NextDouble() < 0.40)
+            {
+                commenceFight();
+                Debug.WriteLine("Spawn enemy");
+            }
+        }
+
+
+        static double playerHealth = 100.0;
+        static double enemyHealth = 100.0;
+        public static void commenceFight() { 
+            while (enemyHealth > 0 && playerHealth > 0)
+            {
+
+            }
+        }
+
 
         public static void drawGame(Graphics g) {
             oldTime = time;
@@ -349,8 +353,8 @@ namespace gameproject {
                 if (side == 1) { color = Color.FromArgb(color.R / 2, color.G / 2, color.B / 2); }
 
                 //draw the pixels of the stripe as a vertical line
-                var pen = new Pen(color);
-                g.DrawLine(pen, new Point(x, drawStart), new Point(x, drawEnd));
+                g.DrawLine(new Pen(color), new Point(x, drawStart), new Point(x, drawEnd));
+
             }
             //done for loop
 
