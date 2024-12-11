@@ -23,6 +23,62 @@ namespace gameproject {
             timer.Tick += invalidateTimer;
             timer.Start();
         }
+        private void drawMinimap(Graphics g)
+        {
+            // Constants for the minimap
+            const int minimapSize = 200; // Total size of the minimap in pixels
+            const int minimapCellSize = 10; // Size of each grid cell on the minimap
+            const int minimapMargin = 10; // Margin from the edge of the screen
+
+            // Calculate the top-left position of the minimap
+            int mapStartX = windowWidth - minimapSize - minimapMargin;
+            int mapStartY = minimapMargin;
+
+            // Draw the minimap background
+            g.FillRectangle(Brushes.Black, mapStartX, mapStartY, minimapSize, minimapSize);
+
+            // Iterate over the world map
+            for (int y = 0; y < Game.worldMap.GetLength(0); y++)
+            {
+                for (int x = 0; x < Game.worldMap.GetLength(1); x++)
+                {
+                    // Determine the color of each cell
+                    Color cellColor;
+                    if (Game.worldMap[y, x] > 0)
+                    {
+                        cellColor = Color.Gray; // Walls
+                    }
+                    else if (Game.worldMap[y, x] == -1)
+                    {
+                        cellColor = Color.Yellow; // Goal
+                    }
+                    else
+                    {
+                        cellColor = Color.Black; // Empty spaces
+                    }
+
+                    // Draw each cell
+                    Brush cellBrush = new SolidBrush(cellColor);
+                    g.FillRectangle(cellBrush,
+                        mapStartX + x * minimapCellSize, // X-coordinate stays the same
+                        mapStartY + y * minimapCellSize, // Y-coordinate follows normal orientation
+                        minimapCellSize,
+                        minimapCellSize);
+                }
+            }
+
+            // Draw the player's position on the minimap
+            Brush playerBrush = Brushes.Red;
+
+            // Adjust player's position for the minimap
+            float playerX = mapStartX + (float)(Game.posX * minimapCellSize);
+            float playerY = mapStartY + (float)(Game.posY * minimapCellSize);
+
+            g.FillEllipse(playerBrush, playerX - 3, playerY - 3, 6, 6); // Small dot for the player
+        }
+
+
+
 
         private void invalidateTimer(object sender, EventArgs e) {
             Invalidate(); //repaint once every 16 ms for 60 fps
@@ -32,6 +88,7 @@ namespace gameproject {
             var g = e.Graphics; // graphics object to draw with
             Game.drawGame(g);
             UI.drawUI(g);
+            drawMinimap(g);
             //base.OnPaint(e); // idk if this is needed
         }
 
@@ -59,12 +116,7 @@ namespace gameproject {
 
     public static class UI {
         private static Font font = new Font("Times New Roman", 16);
-        public static void drawUI(Graphics g) {
-            var info = $"{Game.posX} {Game.posY} {Game.dirX} {Game.dirY} {Game.planeX} {Game.planeY}";
-            //g.DrawString("Mouse position: " + GameForm.mPos.ToString(), font, Brushes.Black, new Point(0,0));
-            g.DrawString(info, font, Brushes.White, new Point(0,0));
-
-
+        public static void drawUI(Graphics g) {        
         }
     }
 
@@ -110,7 +162,7 @@ namespace gameproject {
         //actually important stuff
         public static double spawnX = 5.5, spawnY = 1.5;
         public static double posX = spawnX, posY = spawnY;
-        static int[,] worldMap = { //-1 is the goal
+        public static int[,] worldMap = { //-1 is the goal
             { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
             { 1,1,1,0,0,0,0,0,0,0,0,1,1,1,1 },
             { 1,1,0,0,0,0,0,0,0,0,0,0,1,1,1 },
@@ -123,7 +175,9 @@ namespace gameproject {
             { 1,1,1,0,0,0,0,0,0,0,0,1,1,1,1 },
             { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
         };
- 
+
+        public static int[,] WorldMap => worldMap;
+
         //first index is stage
         //first value in each is the background color, then each number within the map
         //private static Color[][] stageColors =
