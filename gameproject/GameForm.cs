@@ -36,14 +36,20 @@ namespace gameproject {
         protected override void OnPaint(PaintEventArgs e) {
             var g = e.Graphics; // graphics object to draw with
             Game.drawGame(g);
-            if (Game.gameState == Game.STATE.BATTLE)
+            switch (Game.gameState)
             {
-                BattleUI.instance.drawUI(g);
-            } else
-            {
-                UI.drawUI(g);
+                case Game.STATE.FREE_MOVEMENT:
+                    UI.drawUI(g);
+                    break;
+                case Game.STATE.BATTLE:
+                    BattleUI.instance.drawUI(g);
+                    break;
+                case Game.STATE.GAME_OVER:
+                    //nothing is programmed yet
+                    break;
             }
             ActionLog.drawLog(g);
+            ImportantMessageText.updateImportantMessageText(g);
             AnimationPlayer.updateAnimations(DateTime.Now, g);
         }
 

@@ -115,7 +115,7 @@ namespace gameproject
 
         public static int currentStage { get; private set; } = 0; //can be read by ui class
 
-        public enum STATE { FREE_MOVEMENT, BATTLE }
+        public enum STATE { FREE_MOVEMENT, BATTLE, GAME_OVER }
         public static STATE gameState { get; set; } = STATE.FREE_MOVEMENT;
 
         private static void rotationAnim(object sender, EventArgs e)
