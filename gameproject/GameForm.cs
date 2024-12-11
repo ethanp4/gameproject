@@ -265,6 +265,8 @@ namespace gameproject {
             }
         }
 
+        
+
         public static void drawGame(Graphics g) {
             oldTime = time;
             time = Environment.TickCount;
