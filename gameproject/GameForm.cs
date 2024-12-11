@@ -40,6 +40,8 @@ namespace gameproject {
             {
                 UI.drawUI(g);
             }
+            ActionLog.drawLog(g);
+            AnimationPlayer.updateAnimations(DateTime.Now, g);
         }
 
         private void formMouseMove(object sender, MouseEventArgs e) {

@@ -189,7 +189,7 @@ namespace gameproject
         {
             if (random.NextDouble() < 0.40)
             {
-                BattleHandler.initBattle();
+                BattleHandler.initBattle(); //main entry point for a battle is this function
                 Debug.WriteLine("Spawn enemy");
             }
         }
