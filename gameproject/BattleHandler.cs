@@ -1,19 +1,15 @@
-using System.Diagnostics;
-
-namespace gameproject
-{
-    public class BattleHandler
-    {
+namespace gameproject {
+    public class BattleHandler {
         public static BattleHandler instance { get; private set; }
         public double playerHealth = 100.0;
         public double enemyHealth = 100.0;
         public double playerCritRate = 0.05;
         public double enemyCritRate = 0.05;
         public double playerDamage = 10.0;
-        public double enemyDamage = 10.0;
+        public double enemyDamage = 5.0;
         public bool playerTurn = true;
         public static Random random = new();
-
+        enum END_STATE { WIN, LOSS, RAN_AWAY };
         public static void initBattle() //using this function as opposed to the constructor to make it the setting of other game states more explicit maybe
         {                               //only one battlehandler and one battleui will exist at a time
             instance = new();
@@ -33,32 +29,38 @@ namespace gameproject
         {
             if (!playerTurn) return;
             ActionLog.appendAction($"Player chose {choiceString}");
-            switch (choiceString)
-            {
+            switch (choiceString) {
                 case "Attack":
-                    var dmg = playerDamage;
-                    AnimationPlayer.addAnimation(attackAnim);
-                    playerTurn = false;
-                    var crit = random.NextDouble() < playerCritRate;
-                    if (crit) { dmg *= 2; ActionLog.appendAction("Critical hit!"); }
-                    ActionLog.appendAction($"Player dealt {dmg} damage");
-                    enemyHealth -= playerDamage * 2;
-                    ActionLog.appendAction($"Enemy health: {enemyHealth}");
-                    if (enemyHealth <= 0)
-                    {
-                        endBattle(0);
+                    playerAttack();
+                    if (enemyHealth <= 0) {
+                        endBattle(END_STATE.WIN);
                     }
                     enemyTurn();
-                    playerTurn = true;
                     break;
                 case "Defend":
                     break;
                 case "Run":
-                    
+                    if (random.NextDouble() < 0.5) {
+                        endBattle(END_STATE.RAN_AWAY);
+                    } else {
+                        ActionLog.appendAction("Failed to run away...");
+                        enemyTurn();
+                    }
                     break;
 
             }
             //Debug.WriteLine($"Player chose {choiceString}");
+        }
+        private void playerAttack() {
+            playerTurn = false;
+            var dmg = playerDamage;
+            AnimationPlayer.addAnimation(attackAnim);
+            playerTurn = false;
+            var crit = random.NextDouble() < playerCritRate;
+            if (crit) { dmg *= 2; ActionLog.appendAction("Critical hit!"); }
+            ActionLog.appendAction($"Player dealt {dmg} damage");
+            enemyHealth -= playerDamage * 2;
+            ActionLog.appendAction($"Enemy health: {enemyHealth}");
         }
         private void enemyTurn() //enemy attacks
         {
@@ -68,24 +70,26 @@ namespace gameproject
             ActionLog.appendAction($"Enemy dealt {dmg} damage");
             playerHealth -= enemyDamage * 2;
             ActionLog.appendAction($"Player health: {playerHealth}");
-            if (playerHealth <= 0)
-            {
-                endBattle(1);
+            if (playerHealth <= 0) {
+                endBattle(END_STATE.LOSS);
             }
+            playerTurn = true;
         }
 
-        private void endBattle(int result)
-        {
-            switch (result)
-            {
-                case 0: //win state
+        private void endBattle(END_STATE result) {
+            switch (result) {
+                case END_STATE.WIN: //win state
                     ActionLog.appendAction("Enemy defeated!");
                     Game.gameState = Game.STATE.FREE_MOVEMENT;
                     break;
-                case 1: //loss state
+                case END_STATE.LOSS: //loss state
                     ActionLog.appendAction("Player defeated!");
                     Game.gameState = Game.STATE.GAME_OVER;
                     ImportantMessageText.setMessage("Game Over isnt programmed yet", 99999);
+                    break;
+                case END_STATE.RAN_AWAY: //ran away
+                    ActionLog.appendAction("Player ran away!");
+                    Game.gameState = Game.STATE.FREE_MOVEMENT;
                     break;
             }
         }
