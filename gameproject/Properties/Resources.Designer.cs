@@ -63,6 +63,46 @@ namespace gameproject.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] Attack_1 {
+            get {
+                object obj = ResourceManager.GetObject("Attack-1", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Attack_2 {
+            get {
+                object obj = ResourceManager.GetObject("Attack-2", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Attack_3 {
+            get {
+                object obj = ResourceManager.GetObject("Attack-3", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Attack_4 {
+            get {
+                object obj = ResourceManager.GetObject("Attack-4", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] Blackjack_theme {
             get {
                 object obj = ResourceManager.GetObject("Blackjack theme", resourceCulture);
