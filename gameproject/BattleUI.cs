@@ -58,19 +58,20 @@ namespace gameproject
         public void drawUI(Graphics g) {
             drawSprite(enemyIndex, g);
             var drawingYOffset = 0;
-            Rectangle drawLater = new(0,0,0,0);
+            Rectangle drawLater = new();
             foreach (var option in options)
             {
-                var rectPoint = new Point(optionRect.X, optionRect.Y + drawingYOffset);
-                g.DrawRectangle(Pens.White, rectPoint.X, rectPoint.Y, optionRect.Width, optionRect.Height);
-                g.DrawString(option.Key, GameForm.font, Brushes.White, optionRect.X, rectPoint.Y);
+                var rectPoint = new Point(optionRect.X, optionRect.Y + drawingYOffset); //top left of the rectangle
                 if (option.Value)
                 {
                     drawLater = new Rectangle(optionRect.X, optionRect.Y + drawingYOffset, optionRect.Width, optionRect.Height);
+                } else {
+                    g.DrawRectangle(Pens.White, rectPoint.X, rectPoint.Y, optionRect.Width, optionRect.Height);
                 }
+                g.DrawString(option.Key, GameForm.font, Brushes.White, optionRect.X, rectPoint.Y);
                 drawingYOffset += optionRect.Height;
             }
-            g.DrawRectangle(Pens.Red, drawLater); //need to draw this overtop so it isnt covered
+            g.DrawRectangle(Pens.Red, drawLater); //need to draw this last so its overtop
         }
 
         private void drawSprite(int spriteIndex, Graphics g) {
