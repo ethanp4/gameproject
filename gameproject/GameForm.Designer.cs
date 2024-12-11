@@ -56,6 +56,8 @@
             // lblHP
             // 
             lblHP.AutoSize = true;
+            lblHP.BackColor = Color.Transparent;
+            lblHP.ForeColor = SystemColors.Control;
             lblHP.Location = new Point(12, 32);
             lblHP.Name = "lblHP";
             lblHP.Size = new Size(28, 20);
@@ -65,6 +67,8 @@
             // lblMP
             // 
             lblMP.AutoSize = true;
+            lblMP.BackColor = Color.Transparent;
+            lblMP.ForeColor = Color.White;
             lblMP.Location = new Point(11, 76);
             lblMP.Name = "lblMP";
             lblMP.Size = new Size(30, 20);
