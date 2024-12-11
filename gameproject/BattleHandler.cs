@@ -1,4 +1,8 @@
-namespace gameproject {
+using System.Runtime.CompilerServices;
+using gameproject.Enemies;
+
+namespace gameproject
+{
     public class BattleHandler {
         public static BattleHandler instance { get; private set; }
         public double playerHealth = 100.0;
@@ -7,14 +11,20 @@ namespace gameproject {
         public double enemyCritRate = 0.05;
         public double playerDamage = 10.0;
         public double enemyDamage = 5.0;
+
+        public BaseEnemy enemy;
+
         public bool playerTurn = true;
+        private bool playerDefending = false;
         public static Random random = new();
         enum END_STATE { WIN, LOSS, RAN_AWAY };
         public static void initBattle() //using this function as opposed to the constructor to make it the setting of other game states more explicit maybe
         {                               //only one battlehandler and one battleui will exist at a time
             instance = new();
-            BattleUI.instance = new(0); //these options will be randomly rolled from within here in the future
-            ActionLog.appendAction($"Battle started with enemy {0}");
+            var enemy = new Snowman(1);
+            instance.enemy = enemy;
+            BattleUI.instance = new(); //these options will be randomly rolled from within here in the future
+            ActionLog.appendAction($"Battle started with enemy {enemy}");
             Game.gameState = Game.STATE.BATTLE;
         }
 
@@ -38,6 +48,9 @@ namespace gameproject {
                     enemyTurn();
                     break;
                 case "Defend":
+                    playerDefending = true;
+
+                    enemyTurn();
                     break;
                 case "Run":
                     if (random.NextDouble() < 0.5) {
@@ -47,9 +60,7 @@ namespace gameproject {
                         enemyTurn();
                     }
                     break;
-
             }
-            //Debug.WriteLine($"Player chose {choiceString}");
         }
         private void playerAttack() {
             playerTurn = false;
@@ -67,6 +78,7 @@ namespace gameproject {
             var dmg = enemyDamage;
             var crit = random.NextDouble() < enemyCritRate;
             if (crit) { dmg *= 2; ActionLog.appendAction("Critical hit!"); }
+            if (playerDefending) { dmg *= 0.5; ActionLog.appendAction("Player defended!"); }
             ActionLog.appendAction($"Enemy dealt {dmg} damage");
             playerHealth -= enemyDamage * 2;
             ActionLog.appendAction($"Player health: {playerHealth}");
