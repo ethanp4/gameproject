@@ -27,7 +27,7 @@ namespace gameproject
         };
         public void playerChoice(string choiceString) //player chooses what to do, that is passed in as a parameter, then the enemy attacks
         {
-            var attack = new AnimatedSprite(new Point(100, 100), attackImages, 3);
+            var attack = new AnimatedSprite(new Point(500, 300), attackImages, 100, 300);
             AnimationPlayer.addAnimation(attack);
             ActionLog.appendAction($"Player chose {choiceString}");
             Debug.WriteLine($"Player chose {choiceString}");

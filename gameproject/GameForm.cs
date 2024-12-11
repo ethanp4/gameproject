@@ -15,6 +15,7 @@ namespace gameproject {
 
         public GameForm() {
             InitializeComponent();
+            AutoScaleMode = AutoScaleMode.Dpi;
             DoubleBuffered = true;
             Width = windowWidth;
             Height = windowHeight;
@@ -24,6 +25,8 @@ namespace gameproject {
             timer.Interval = (int)Math.Floor(1f / (float)framerate * 1000f); // frametime for 60 fps
             timer.Tick += invalidateTimer;
             timer.Start();
+
+            MouseClick += (sender, e) => { ActionLog.appendAction($"Click at {mPos.X}, {mPos.Y}"); };
         }
 
         private void invalidateTimer(object sender, EventArgs e) {

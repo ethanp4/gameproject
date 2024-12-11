@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,8 +14,18 @@ namespace gameproject
         public static void updateAnimations(DateTime now, Graphics g)
         {
             foreach (var animation in animationList)
-            { //compare current time, started time, and using framerate, choose a frame to draw to the screen
-                
+            { //compare current time to animation start time to see what frame should be drawn
+                var time = animation.Key;
+                var anim = animation.Value;
+                var delta = now - time;
+                int frameNo = (int)delta.TotalMilliseconds / anim.frameTime;
+                if (delta.TotalMilliseconds > anim.animationLength)
+                {
+                    animationList.Remove(animation);
+                    return;
+                }
+                Debug.WriteLine($"delta: {delta.TotalMilliseconds}, length: {anim.animationLength}, frameNo: {frameNo}");
+                g.DrawImage(animation.Value.frames[frameNo], animation.Value.position.X, animation.Value.position.Y);
             }
         }
 
