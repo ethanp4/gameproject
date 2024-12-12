@@ -1,48 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.XPath;
 
 namespace gameproject
 {
-    public class Player
+    public static class Player
     {
-        public int Health { get; private set; }
-        public int MaxHealth { get; private set; }
-        public int MP { get; private set; }
-        public int MaxMP { get; private set; }
+        const int baseHealth = 25;
+        const int baseAttack = 2;
+        const double baseCritRate = 0.01;
+        const double critRateLevelMultiplier = 1.01;
+        const double healthLevelMultiplier = 1.2;
+        const double attackLevelMultiplier = 1.2;
+        public static int health = baseHealth;
+        public static int attack = baseAttack;
+        public static int xp = 2;
+        public static int canadianDollars = 0;
 
-        public Player(int maxHealth, int maxMP)
-        {
-            MaxHealth = maxHealth;
-            MaxMP = maxMP;
-            Health = maxHealth;
-            MP = maxMP;
+        public static int getMaxHealth() {
+            return (int)(baseHealth * calculateLevel() * healthLevelMultiplier);
         }
 
-        public void TakeDamage(int damage)
-        {
-            Health -= damage;
-            if (Health < 0) Health = 0; 
+        public static int getAttack() {
+            return (int)(baseAttack * calculateLevel() * attackLevelMultiplier);
         }
 
-        public void Heal(int amount)
-        {
-            Health += amount;
-            if (Health > MaxHealth) Health = MaxHealth; // Cap health at max
+        public static double getCritRate() {
+            return (baseCritRate * calculateLevel() * critRateLevelMultiplier);
         }
 
-        public void UseMP(int amount)
-        {
-            MP -= amount;
-            if (MP < 0) MP = 0; 
+        public static void addXp(int xp) {
+            var prevLevel = calculateLevel();
+            Player.xp += xp;
+            if (calculateLevel() != prevLevel) {
+                ActionLog.appendAction($"Player is now level {calculateLevel()}!");
+                var healthDiff = getMaxHealth() - health;
+                health += (int)(healthDiff * 0.75); //gain 75% of missing health
+            }
         }
 
-        public void RegenerateMP(int amount)
-        {
-            MP += amount;
-            if (MP > MaxMP) MP = MaxMP; // Cap MP at max
+        public static int calculateLevel() {
+            
+            return (int)Math.Sqrt(xp/2); // lv 1 - 2 xp, lv 2 - 8 xp, lv 3 - 18 xp, lv 4 - 32 xp
         }
     }
 }

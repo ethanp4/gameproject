@@ -5,12 +5,6 @@ namespace gameproject
 {
     public class BattleHandler {
         public static BattleHandler instance { get; private set; }
-        public double playerHealth = 100.0;
-        public double enemyHealth = 100.0;
-        public double playerCritRate = 0.05;
-        public double enemyCritRate = 0.05;
-        public double playerDamage = 10.0;
-        public double enemyDamage = 5.0;
 
         public BaseEnemy enemy;
 
@@ -21,9 +15,9 @@ namespace gameproject
         public static void initBattle() //using this function as opposed to the constructor to make it the setting of other game states more explicit maybe
         {                               //only one battlehandler and one battleui will exist at a time
             instance = new();
-            var enemy = new Snowman(1);
+            var enemy = new Snowman(Player.calculateLevel()); //these options will be randomly rolled from within here in the future
             instance.enemy = enemy;
-            BattleUI.instance = new(); //these options will be randomly rolled from within here in the future
+            BattleUI.instance = new();
             ActionLog.appendAction($"Battle started with enemy {enemy}");
             Game.gameState = Game.STATE.BATTLE;
         }
@@ -42,7 +36,7 @@ namespace gameproject
             switch (choiceString) {
                 case "Attack":
                     playerAttack();
-                    if (enemyHealth <= 0) {
+                    if (enemy.health <= 0) {
                         endBattle(END_STATE.WIN);
                     }
                     enemyTurn();
@@ -64,25 +58,25 @@ namespace gameproject
         }
         private void playerAttack() {
             playerTurn = false;
-            var dmg = playerDamage;
+            var dmg = Player.getAttack();
             AnimationPlayer.addAnimation(attackAnim);
             playerTurn = false;
-            var crit = random.NextDouble() < playerCritRate;
+            var crit = random.NextDouble() < Player.getCritRate();
             if (crit) { dmg *= 2; ActionLog.appendAction("Critical hit!"); }
             ActionLog.appendAction($"Player dealt {dmg} damage");
-            enemyHealth -= playerDamage * 2;
-            ActionLog.appendAction($"Enemy health: {enemyHealth}");
+            enemy.health -= dmg;
+            ActionLog.appendAction($"Enemy health: {enemy.health}");
         }
         private void enemyTurn() //enemy attacks
         {
-            var dmg = enemyDamage;
-            var crit = random.NextDouble() < enemyCritRate;
+            double dmg = enemy.attack;
+            var crit = random.NextDouble() < 0.1;
             if (crit) { dmg *= 2; ActionLog.appendAction("Critical hit!"); }
             if (playerDefending) { dmg *= 0.5; ActionLog.appendAction("Player defended!"); }
             ActionLog.appendAction($"Enemy dealt {dmg} damage");
-            playerHealth -= enemyDamage * 2;
-            ActionLog.appendAction($"Player health: {playerHealth}");
-            if (playerHealth <= 0) {
+            Player.health -= enemy.attack * 2;
+            ActionLog.appendAction($"Player health: {Player.health}");
+            if (Player.health <= 0) {
                 endBattle(END_STATE.LOSS);
             }
             playerTurn = true;
@@ -92,6 +86,12 @@ namespace gameproject
             switch (result) {
                 case END_STATE.WIN: //win state
                     ActionLog.appendAction("Enemy defeated!");
+                    var xp = enemy.calculateRewardXp();
+                    ActionLog.appendAction($"Player gained {xp} xp!");
+                    Player.addXp(xp);
+                    var profit = enemy.calculateRewardCanadianDollars();
+                    Player.canadianDollars += profit;
+                    ActionLog.appendAction($"Player received {profit} canadian dollars!");
                     Game.gameState = Game.STATE.FREE_MOVEMENT;
                     break;
                 case END_STATE.LOSS: //loss state

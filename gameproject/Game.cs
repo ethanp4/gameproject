@@ -35,13 +35,13 @@ namespace gameproject
         static double time = 0; //time of current frame
         static double oldTime = 0; //time of previous frame
         static double frameTime { get { return (time - oldTime) / 1000f; } } //currently unused
-
         //setup rotation
         private static System.Windows.Forms.Timer rotationTimer = new();
         static Game()
         {
             rotationTimer.Interval = 16;
             rotationTimer.Tick += rotationAnim;
+
         }
         //private static double rotationAnimLength = 0.5;
         private static bool rotationDir = false;
@@ -51,7 +51,7 @@ namespace gameproject
         //actually important stuff
         public static double spawnX = 5.5, spawnY = 1.5;
         public static double posX = spawnX, posY = spawnY;
-        static int[,] worldMap = { //-1 is the goal
+        public static int[,] worldMap = { //-1 is the goal
             { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
             { 1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1 },
             { 1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1 },
@@ -187,7 +187,7 @@ namespace gameproject
         static Random random = new Random();
         public static void considerSpawningEnemy()
         {
-            if (random.NextDouble() < 0.40)
+            if (random.NextDouble() < 0.15)
             {
                 BattleHandler.initBattle(); //main entry point for a battle is this function
                 Debug.WriteLine("Spawn enemy");
