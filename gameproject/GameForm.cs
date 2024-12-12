@@ -26,7 +26,7 @@ namespace gameproject {
             timer.Tick += invalidateTimer;
             timer.Start();
 
-            MouseClick += (sender, e) => { ActionLog.appendAction($"Click at {mPos.X}, {mPos.Y}"); };
+            MouseClick += (sender, e) => { ActionLog.appendAction($"Click at {mPos.X}, {mPos.Y}", ActionLog.COLORS.SYSTEM); };
         }
         private void drawMinimap(Graphics g)
         {

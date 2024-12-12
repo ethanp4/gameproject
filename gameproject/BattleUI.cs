@@ -55,14 +55,28 @@ namespace gameproject
             }
         }
         public void drawUI(Graphics g) {
+            drawOptions(g);
             drawSprite(BattleHandler.instance.enemy.sprite, g);
+            drawEnemyInfo(g);
+
+        }
+
+        private void drawEnemyInfo(Graphics g) {
+            var textPoint = new Point(GameForm.windowWidth / 2 - 150, GameForm.windowHeight / 2 - 240);
+            g.DrawString(BattleHandler.instance.enemy.name, GameForm.font, Brushes.White, textPoint.X, textPoint.Y+32);
+            var healthOutlineRect = new RectangleF(textPoint.X, textPoint.Y, 300, 30);
+            var filledWidth = (double)BattleHandler.instance.enemy.health / (double)BattleHandler.instance.enemy.maxHealth * 300.0;
+            var healthFillRect = new RectangleF(textPoint.X, textPoint.Y, (float)filledWidth, 30);
+            g.DrawRectangle(Pens.Red, healthOutlineRect);
+            g.FillRectangle(Brushes.Red, healthFillRect);
+        }
+
+        private void drawOptions(Graphics g) {
             var drawingYOffset = 0;
             Rectangle drawLater = new();
-            foreach (var option in options)
-            {
+            foreach (var option in options) {
                 var rectPoint = new Point(optionRect.X, optionRect.Y + drawingYOffset); //top left of the rectangle
-                if (option.Value)
-                {
+                if (option.Value) {
                     drawLater = new Rectangle(optionRect.X, optionRect.Y + drawingYOffset, optionRect.Width, optionRect.Height);
                 } else {
                     g.DrawRectangle(Pens.White, rectPoint.X, rectPoint.Y, optionRect.Width, optionRect.Height);
