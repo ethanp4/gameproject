@@ -75,12 +75,6 @@ namespace gameproject
 
         private void drawSprite(Image sprite, Graphics g) {
             var scaledSprite = new Bitmap(sprite, new Size(300,300));
-            //var test = new Bitmap(300, 300);
-            //using (var graphics = Graphics.FromImage(test))
-            //{
-            //    graphics.Clear(Color.WhiteSmoke);
-            //    graphics.DrawString("I am a test image", GameForm.font, Brushes.Black, new Point(50, 50));
-            //}
             g.DrawImage(scaledSprite, GameForm.windowWidth/2-150, GameForm.windowHeight/2-150);
             scaledSprite.Dispose();
         }

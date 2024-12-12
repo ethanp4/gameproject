@@ -24,7 +24,7 @@ namespace gameproject
                     animationList.Remove(animation);
                     return;
                 }
-                Debug.WriteLine($"delta: {delta.TotalMilliseconds}, length: {anim.animationLength}, frameNo: {frameNo}");
+                //Debug.WriteLine($"delta: {delta.TotalMilliseconds}, length: {anim.animationLength}, frameNo: {frameNo}");
                 g.DrawImage(animation.Value.frames[frameNo], animation.Value.position.X, animation.Value.position.Y);
             }
         }
