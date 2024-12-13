@@ -8,6 +8,40 @@ namespace gameproject
 {
     public static class UI
     {
+        public static void drawPlayerBars(Graphics g)
+        {
+            
+            int barWidth = 300;
+            int barHeight = 20;
+            int barX = 20; 
+            int hpBarY = 20; 
+            int mpBarY = 50; 
+
+            
+            using (Font smallFont = new Font(GameForm.font.FontFamily, 12)) 
+            {
+                // Player HP Bar
+                float hpPercentage = (float)Player.health / Player.getMaxHealth();
+                g.FillRectangle(Brushes.Gray, barX, hpBarY, barWidth, barHeight); // background
+                g.FillRectangle(Brushes.Green, barX, hpBarY, (int)(barWidth * hpPercentage), barHeight); 
+                g.DrawRectangle(Pens.Black, barX, hpBarY, barWidth, barHeight); //border 
+                string hpText = $"HP: {Player.health}/{Player.getMaxHealth()}";
+                SizeF hpTextSize = g.MeasureString(hpText, smallFont);
+                g.DrawString(hpText, smallFont, Brushes.White,
+                    barX + (barWidth - hpTextSize.Width) / 2, hpBarY + (barHeight - hpTextSize.Height) / 2); 
+
+                // Player MP Bar
+                float mpPercentage = (float)Player.MP / Player.maxMP;
+                g.FillRectangle(Brushes.Gray, barX, mpBarY, barWidth, barHeight); // background
+                g.FillRectangle(Brushes.Blue, barX, mpBarY, (int)(barWidth * mpPercentage), barHeight); 
+                g.DrawRectangle(Pens.Black, barX, mpBarY, barWidth, barHeight); // border
+                string mpText = $"MP: {Player.MP}/{Player.maxMP}";
+                SizeF mpTextSize = g.MeasureString(mpText, smallFont);
+                g.DrawString(mpText, smallFont, Brushes.White,
+                    barX + (barWidth - mpTextSize.Width) / 2, mpBarY + (barHeight - mpTextSize.Height) / 2); 
+            }
+        }
+
         public static void drawUI(Graphics g)
         {
 
