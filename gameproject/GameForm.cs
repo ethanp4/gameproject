@@ -35,6 +35,7 @@ namespace gameproject {
 
         protected override void OnPaint(PaintEventArgs e) {
             var g = e.Graphics; // graphics object to draw with
+            
             Game.drawGame(g); // Main game rendering
             switch (Game.gameState)
             {
@@ -43,11 +44,13 @@ namespace gameproject {
                     break;
                 case Game.STATE.BATTLE:
                     BattleUI.instance.drawUI(g);
+                    BattleUI.instance.drawUI(g);
                     break;
                 case Game.STATE.GAME_OVER:
                     //nothing is programmed yet
                     break;
             }
+            UI.drawPlayerBars(g);
             UI.drawMinimap(g, windowWidth, windowHeight);
             ActionLog.drawLog(g);
             ImportantMessageText.updateImportantMessageText(g);
