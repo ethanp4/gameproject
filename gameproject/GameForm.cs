@@ -101,6 +101,9 @@ namespace gameproject {
                 case Game.STATE.GAME_OVER:
                     //nothing is programmed yet
                     break;
+                case Game.STATE.IN_SHOP:
+                    Shop.instance.drawShop(g); //handle everything related to the shop
+                    break;
             }
             ActionLog.drawLog(g);
             ImportantMessageText.updateImportantMessageText(g);
@@ -132,6 +135,9 @@ namespace gameproject {
                     break;
                 case Game.STATE.BATTLE:
                     BattleUI.instance.handleInput(e);
+                    break;
+                case Game.STATE.IN_SHOP:
+                    Shop.instance.handleInput(e);
                     break;
             }
         }

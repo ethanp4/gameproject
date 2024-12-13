@@ -14,7 +14,6 @@ namespace gameproject
         private int optionIndex = 0;
         public static BattleUI instance = null;
 
-
         public BattleUI()
         { //later prevent this from running again if the player is already in battle
             instance = this;

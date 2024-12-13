@@ -115,7 +115,7 @@ namespace gameproject
 
         public static int currentStage { get; private set; } = 0; //can be read by ui class
 
-        public enum STATE { FREE_MOVEMENT, BATTLE, GAME_OVER }
+        public enum STATE { FREE_MOVEMENT, BATTLE, GAME_OVER, IN_SHOP }
         public static STATE gameState { get; set; } = STATE.FREE_MOVEMENT;
 
         private static void rotationAnim(object sender, EventArgs e)
@@ -176,12 +176,20 @@ namespace gameproject
             catch { Debug.WriteLine("index out of bounds in move()"); }
             if (worldMap[(int)posX, (int)posY] == -1)
             {
-                posX = spawnX; posY = spawnY;
-                currentStage++;
+                moveToNextRoom();
             }
             if (new Point((int)posX, (int)posY) != prevPos)
             {
                 considerSpawningEnemy();
+            }
+        }
+        private static void moveToNextRoom() {
+            currentStage++;
+            if (currentStage == 2) {
+                gameState = STATE.IN_SHOP;
+                ActionLog.appendAction("You entered the shop!", ActionLog.COLORS.SPECIAL);
+                Shop.instance = new Shop(); //create new shop instance, from here it could be possible to make stage specific shop contents and stuff
+                posX = spawnX; posY = spawnY;
             }
         }
         static Random random = new Random();
