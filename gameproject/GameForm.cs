@@ -26,7 +26,7 @@ namespace gameproject {
             timer.Tick += invalidateTimer;
             timer.Start();
 
-            MouseClick += (sender, e) => { ActionLog.appendAction($"Click at {mPos.X}, {mPos.Y}"); };
+            MouseClick += (sender, e) => { ActionLog.appendAction($"Click at {mPos.X}, {mPos.Y}", ActionLog.COLORS.SYSTEM); };
         }
 
         private void invalidateTimer(object sender, EventArgs e) {
@@ -48,6 +48,9 @@ namespace gameproject {
                     break;
                 case Game.STATE.GAME_OVER:
                     //nothing is programmed yet
+                    break;
+                case Game.STATE.IN_SHOP:
+                    Shop.instance.drawShop(g); //handle everything related to the shop
                     break;
             }
             UI.drawPlayerBars(g);
@@ -82,6 +85,9 @@ namespace gameproject {
                     break;
                 case Game.STATE.BATTLE:
                     BattleUI.instance.handleInput(e);
+                    break;
+                case Game.STATE.IN_SHOP:
+                    Shop.instance.handleInput(e);
                     break;
             }
         }

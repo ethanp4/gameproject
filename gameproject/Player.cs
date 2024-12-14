@@ -41,7 +41,7 @@ namespace gameproject
             var prevLevel = calculateLevel();
             Player.xp += xp;
             if (calculateLevel() != prevLevel) {
-                ActionLog.appendAction($"Player is now level {calculateLevel()}!");
+                ActionLog.appendAction($"Player is now level {calculateLevel()}!", ActionLog.COLORS.SPECIAL);
                 var healthDiff = getMaxHealth() - health;
                 health += (int)(healthDiff * 0.75); //gain 75% of missing health
             }
@@ -50,6 +50,10 @@ namespace gameproject
         public static int calculateLevel() {
             
             return (int)Math.Sqrt(xp/2); // lv 1 - 2 xp, lv 2 - 8 xp, lv 3 - 18 xp, lv 4 - 32 xp
+        }
+
+        public static int reqXpForNextLevel() {
+            return (int)Math.Pow(calculateLevel() + 1, 2) * 2;
         }
     }
 }
