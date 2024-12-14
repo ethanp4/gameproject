@@ -46,8 +46,9 @@ namespace gameproject {
                     BattleUI.instance.drawUI(g);
                     BattleUI.instance.drawUI(g);
                     break;
-                case Game.STATE.GAME_OVER:
-                    //nothing is programmed yet
+                case Game.STATE.GAME_OVER: //nothing to draw since ImportantMessageText is used elsewhere (line 243 game.cs and line 110 battlehandler.cs)
+                    break;
+                case Game.STATE.YOU_WIN:
                     break;
                 case Game.STATE.IN_SHOP:
                     Shop.instance.drawShop(g); //handle everything related to the shop
@@ -88,6 +89,13 @@ namespace gameproject {
                     break;
                 case Game.STATE.IN_SHOP:
                     Shop.instance.handleInput(e);
+                    break;
+                case Game.STATE.GAME_OVER:
+                case Game.STATE.YOU_WIN:
+                    if (e.KeyCode == Keys.Enter) {
+                        ImportantMessageText.clearMessage();
+                        Game.restart();
+                    }
                     break;
             }
         }

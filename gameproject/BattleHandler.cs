@@ -55,6 +55,15 @@ namespace gameproject
                         enemyTurn();
                     }
                     break;
+                case "Heal":
+                    Player.MP -= 5; // Consume MP
+                    Player.health += 20; // Restore HP
+                    if (Player.health > Player.getMaxHealth()) {
+                        Player.health = Player.getMaxHealth(); // Cap HP at max
+                    }
+                    ActionLog.appendAction("Player used Heal!", ActionLog.COLORS.PLAYER);
+                    enemyTurn();
+                    break;
             }
         }
         private void playerAttack() {
@@ -98,7 +107,7 @@ namespace gameproject
                 case END_STATE.LOSS: //loss state
                     ActionLog.appendAction("Player defeated!", ActionLog.COLORS.SYSTEM);
                     Game.gameState = Game.STATE.GAME_OVER;
-                    ImportantMessageText.setMessage("Game Over isnt programmed yet", 99999);
+                    ImportantMessageText.setMessage("You died!\nPress enter to restart", 99999);
                     break;
                 case END_STATE.RAN_AWAY: //ran away
                     ActionLog.appendAction("Player ran away!", ActionLog.COLORS.SYSTEM);

@@ -26,6 +26,13 @@ namespace gameproject
         public static int maxMP { get { return getMaxMP(); } } //return the function
         public static int MP = maxMP;
 
+        public static void reset() {
+            xp = 2;
+            canadianDollars = 0;
+            health = getMaxHealth();
+            MP = getMaxMP();
+        }
+
         public static int getMaxHealth()
         {
             return (int)(baseHealth * calculateLevel() * healthLevelMultiplier);
@@ -40,7 +47,6 @@ namespace gameproject
         {
             return (baseCritRate * calculateLevel() * critRateLevelMultiplier);
         }
-
 
         public static int getMaxMP() {
             return (int)(baseMaxMP * calculateLevel() * mpLevelMultiplier);
@@ -68,5 +74,7 @@ namespace gameproject
         {
             return (int)Math.Pow(calculateLevel() + 1, 2) * 2;
         }
+
+
     }
 }

@@ -117,13 +117,7 @@ namespace gameproject
             {
                 if (Player.MP >= 5)
                 {
-                    Player.MP -= 5; // Consume MP
-                    Player.health += 20; // Restore HP
-                    if (Player.health > Player.getMaxHealth())
-                    {
-                        Player.health = Player.getMaxHealth(); // Cap HP at max
-                    }
-                    ActionLog.appendAction("Player used Heal!", ActionLog.COLORS.PLAYER);
+                    BattleHandler.instance.playerChoice("Heal");
                 }
                 else
                 {

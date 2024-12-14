@@ -44,25 +44,12 @@ namespace gameproject
         }
         //private static double rotationAnimLength = 0.5;
         private static bool rotationDir = false;
-        private static int rotationSteps = 20; //0.5 seconds at 60 fps
+        private static int rotationSteps = 10; //one step is 1/rotationSteps of the entire rotation and happens each frame
         private static int rotationStepProgress = 0;
 
         //actually important stuff
         public static double spawnX = 5.5, spawnY = 1.5;
         public static double posX = spawnX, posY = spawnY;
-        //public static int[,] worldMap = { //-1 is the goal
-        //    { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
-        //    { 1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1 },
-        //    { 1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1 },
-        //    { 1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1 },
-        //    { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,1 },
-        //    { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,1 },
-        //    { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,1 },
-        //    { 1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1 },
-        //    { 1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1 },
-        //    { 1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1 },
-        //    { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
-        //};
         public static int[,] worldMap { get { return worldMaps[currentStage % worldMaps.Length]; } }
         public static int[][,] worldMaps = {
             new[,]{ //stage 0
@@ -176,16 +163,23 @@ namespace gameproject
             }
         };
 
+        public static void restart() {
+            currentStage = 0;
+            gameState = STATE.FREE_MOVEMENT;
+            posX = spawnX; posY = spawnY;
+            Player.reset();
+
+        }
+
         public static int currentStage { get; private set; } = 0; //can be read by ui class
 
-        public enum STATE { FREE_MOVEMENT, BATTLE, GAME_OVER, IN_SHOP }
-        public static STATE gameState { get; set; } = STATE.FREE_MOVEMENT;
+        public enum STATE { FREE_MOVEMENT, BATTLE, GAME_OVER, IN_SHOP, YOU_WIN } //shop is unused
+        public static STATE gameState { get; set; } = STATE.FREE_MOVEMENT; //dictates where input is handled and which draw functions are called
 
-        private static void rotationAnim(object sender, EventArgs e)
+        private static void rotationAnim(object sender, EventArgs e) //rotation timer tick function
         {
             rotationStepProgress++;
             double pct = (double)rotationStepProgress / (double)rotationSteps;
-            //lerpDir(pct); failed experiment
             if (rotationStepProgress == rotationSteps)
             {
                 rotationStepProgress = 0;
@@ -208,8 +202,6 @@ namespace gameproject
 
         public static void rotate(bool dir)
         {
-            //setAngle(dir);
-            //return;
             if (!rotationTimer.Enabled)
             {
                 rotationDir = dir;
@@ -246,6 +238,7 @@ namespace gameproject
                 considerSpawningEnemy();
             }
         }
+
         private static void moveToNextRoom() {
             currentStage++;
             //if (currentStage == 2) {
@@ -253,6 +246,10 @@ namespace gameproject
             //    ActionLog.appendAction("You entered the shop!", ActionLog.COLORS.SPECIAL);
             //    Shop.instance = new Shop(); //create new shop instance, from here it could be possible to make stage specific shop contents and stuff
             //}
+            if (currentStage == worldMaps.Length) {
+                gameState = STATE.YOU_WIN;
+                ImportantMessageText.setMessage("You win!\nPress enter to restart", 99999);
+            }
             posX = spawnX; posY = spawnY;
         }
         static Random random = new Random();
@@ -269,7 +266,7 @@ namespace gameproject
         {
             oldTime = time;
             time = Environment.TickCount;
-            //renderering code in this for loop taken from https://lodev.org/cgtutor/raycasting.html
+            //rendering code in this for loop taken from https://lodev.org/cgtutor/raycasting.html
             var currentStageColors = stageColors[currentStage % stageColors.Length];
             g.FillRectangle(new SolidBrush(currentStageColors[0]), new Rectangle(0, 0, width, height)); //draw background first
             var pen = new Pen(Color.White);
@@ -350,20 +347,12 @@ namespace gameproject
                 if (drawEnd >= height) drawEnd = height - 1;
 
                 Color color = currentStageColors[worldMap[mapX, mapY]];
-                //switch (worldMap[mapX,mapY]) {
-                //    case 1: color = currentStageColors[1]; break; 
-                //    case 2: color = currentStageColors[1]; break; 
-                //    case 3: color = currentStageColors[1]; break; 
-                //    case 4: color = Color.White; break; 
-                //    default: color = Color.Yellow; break; 
-                //}
 
                 //give x and y sides different brightness
                 if (side == 1) { color = Color.FromArgb(color.R / 2, color.G / 2, color.B / 2); }
-                pen.Color = color;
+                pen.Color = color; //this pen is reused to use way less memory
                 //draw the pixels of the stripe as a vertical line
                 g.DrawLine(pen, new Point(x, drawStart), new Point(x, drawEnd));
-                //pen.Dispose(); //makes this use like 40 mb less memory
             }
             //done for loop
 

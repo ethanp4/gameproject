@@ -20,5 +20,9 @@ namespace gameproject
             if (currentMessage == "") { return; }
             g.DrawString(currentMessage, biggerFont, Brushes.Beige, new Point(GameForm.windowWidth / 2, GameForm.windowHeight / 2));
         }
+
+        public static void clearMessage() {
+            currentMessage = "";
+        }
     }
 }
