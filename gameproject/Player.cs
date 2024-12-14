@@ -26,17 +26,21 @@ namespace gameproject
         public static int maxMP { get { return getMaxMP(); } } //return the function
         public static int MP = maxMP;
 
-        public static int getMaxHealth() {
+        public static int getMaxHealth()
+        {
             return (int)(baseHealth * calculateLevel() * healthLevelMultiplier);
         }
 
-        public static int getAttack() {
+        public static int getAttack()
+        {
             return (int)(baseAttack * calculateLevel() * attackLevelMultiplier);
         }
 
-        public static double getCritRate() {
+        public static double getCritRate()
+        {
             return (baseCritRate * calculateLevel() * critRateLevelMultiplier);
         }
+
 
         public static int getMaxMP() {
             return (int)(baseMaxMP * calculateLevel() * mpLevelMultiplier);
@@ -45,19 +49,21 @@ namespace gameproject
         public static void addXp(int xp) {
             var prevLevel = calculateLevel();
             Player.xp += xp;
-            if (calculateLevel() != prevLevel) {
+            if (calculateLevel() != prevLevel)
+            {
                 ActionLog.appendAction($"Player is now level {calculateLevel()}!", ActionLog.COLORS.SPECIAL);
                 var healthDiff = getMaxHealth() - health;
                 health += (int)(healthDiff * 0.50); //gain 50% of missing health
             }
         }
 
-        public static int calculateLevel() {
-            
-            return (int)Math.Sqrt(xp/2); // lv 1 - 2 xp, lv 2 - 8 xp, lv 3 - 18 xp, lv 4 - 32 xp
+        public static int calculateLevel()
+        {
+            return (int)Math.Sqrt(xp / 2); // lv 1 - 2 xp, lv 2 - 8 xp, lv 3 - 18 xp, lv 4 - 32 xp
         }
 
-        public static int reqXpForNextLevel() {
+        public static int reqXpForNextLevel()
+        {
             return (int)Math.Pow(calculateLevel() + 1, 2) * 2;
         }
     }
