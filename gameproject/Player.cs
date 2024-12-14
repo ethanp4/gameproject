@@ -13,16 +13,17 @@ namespace gameproject
         const int baseHealth = 25;
         const int baseAttack = 2;
         const double baseCritRate = 0.01;
-        const double critRateLevelMultiplier = 1.01;
+        const double critRateLevelMultiplier = 1.1;
         const double healthLevelMultiplier = 1.2;
         const double attackLevelMultiplier = 1.2;
+        const double mpLevelMultiplier = 1.2;
         public static int attack = baseAttack;
         public static int xp = 2;
         public static int canadianDollars = 0;
-        public static int baseMaxMP = 100;
+        public static int baseMaxMP = 20;
 
         public static int health = getMaxHealth(); // Start with max HP
-        public static int maxMP = baseMaxMP; // Fixed max MP (or make it dynamic if needed)
+        public static int maxMP { get { return getMaxMP(); } } //return the function
         public static int MP = maxMP;
 
         public static int getMaxHealth() {
@@ -37,13 +38,17 @@ namespace gameproject
             return (baseCritRate * calculateLevel() * critRateLevelMultiplier);
         }
 
+        public static int getMaxMP() {
+            return (int)(baseMaxMP * calculateLevel() * mpLevelMultiplier);
+        }
+
         public static void addXp(int xp) {
             var prevLevel = calculateLevel();
             Player.xp += xp;
             if (calculateLevel() != prevLevel) {
                 ActionLog.appendAction($"Player is now level {calculateLevel()}!", ActionLog.COLORS.SPECIAL);
                 var healthDiff = getMaxHealth() - health;
-                health += (int)(healthDiff * 0.75); //gain 75% of missing health
+                health += (int)(healthDiff * 0.50); //gain 50% of missing health
             }
         }
 
