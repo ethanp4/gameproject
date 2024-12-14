@@ -44,7 +44,9 @@ namespace gameproject
 
         public static void drawUI(Graphics g)
         {
-
+            var canadianDollarsDisplay = $"C$: {Player.canadianDollars}";
+            var displayPoint = new Point(10, 70); 
+            g.DrawString(canadianDollarsDisplay, GameForm.font, Brushes.White, displayPoint);
         }
         public static void drawMinimap(Graphics g, int windowWidth, int windowHeight)
         {
