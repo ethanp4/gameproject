@@ -9,6 +9,8 @@ namespace gameproject {
             g.DrawString("Welcome to the shop", GameForm.font, Brushes.Gold, textPoint);
             var shopMenuBorder = new Rectangle(100, 200, 500, 650);
             g.DrawRectangle(Pens.Black, shopMenuBorder);
+            var bruh = new SolidBrush(Color.FromArgb(100, 100, 100, 100));
+            g.FillRectangle(bruh, shopMenuBorder);
         }
 
         internal void handleInput(KeyEventArgs e) {
