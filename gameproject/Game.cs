@@ -189,8 +189,8 @@ namespace gameproject
                 gameState = STATE.IN_SHOP;
                 ActionLog.appendAction("You entered the shop!", ActionLog.COLORS.SPECIAL);
                 Shop.instance = new Shop(); //create new shop instance, from here it could be possible to make stage specific shop contents and stuff
-                posX = spawnX; posY = spawnY;
             }
+            posX = spawnX; posY = spawnY;
         }
         static Random random = new Random();
         public static void considerSpawningEnemy()

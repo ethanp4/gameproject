@@ -63,7 +63,7 @@ namespace gameproject
 
         private void drawEnemyInfo(Graphics g) {
             var textPoint = new Point(GameForm.windowWidth / 2 - 150, GameForm.windowHeight / 2 - 240);
-            g.DrawString(BattleHandler.instance.enemy.name, GameForm.font, Brushes.White, textPoint.X, textPoint.Y+32);
+            g.DrawString(BattleHandler.instance.enemy.ToString(), GameForm.font, Brushes.White, textPoint.X, textPoint.Y+32);
             var healthOutlineRect = new RectangleF(textPoint.X, textPoint.Y, 300, 30);
             var filledWidth = (double)BattleHandler.instance.enemy.health / (double)BattleHandler.instance.enemy.maxHealth * 300.0;
             var healthFillRect = new RectangleF(textPoint.X, textPoint.Y, (float)filledWidth, 30);
