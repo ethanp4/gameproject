@@ -54,6 +54,8 @@ namespace gameproject
                 ActionLog.appendAction($"Player is now level {calculateLevel()}!", ActionLog.COLORS.SPECIAL);
                 var healthDiff = getMaxHealth() - health;
                 health += (int)(healthDiff * 0.50); //gain 50% of missing health
+                var mpDiff = getMaxMP() - MP;
+                MP += (int)(mpDiff * 0.50);
             }
         }
 
