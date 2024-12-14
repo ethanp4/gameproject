@@ -56,7 +56,7 @@ namespace gameproject {
         {
             base.OnFormClosed(e);
 
-            // Clean up the player
+           
             bgmPlayer.controls.stop();
             bgmPlayer.close();
         }

@@ -53,6 +53,7 @@ namespace gameproject
                     break;
             }
         }
+
         public void drawUI(Graphics g) {
             drawOptions(g);
             drawSprite(BattleHandler.instance.enemy.sprite, g);
@@ -69,6 +70,23 @@ namespace gameproject
             g.DrawRectangle(Pens.Red, healthOutlineRect);
             g.FillRectangle(Brushes.Red, healthFillRect);
         }
+      
+      private void otherEnemyHealthBar(Graphics g) {
+            // Draw Enemy HP Bar
+            var enemy = BattleHandler.instance.enemy; // Get the current enemy
+            if (enemy != null)
+            {
+                float hpPercentage = (float)enemy.health / enemy.maxHealth; // calculates HP percentage
+                int barWidth = 300; 
+                int barHeight = 20; 
+                int barX = GameForm.windowWidth / 2 - barWidth / 2; 
+                int barY = GameForm.windowHeight / 2 + 170; 
+            
+                g.FillRectangle(Brushes.Gray, barX, barY, barWidth, barHeight);
+                g.FillRectangle(Brushes.Red, barX, barY, (int)(barWidth * hpPercentage), barHeight);
+                g.DrawRectangle(Pens.Black, barX, barY, barWidth, barHeight);
+            }
+      }
 
         private void drawOptions(Graphics g) {
             var drawingYOffset = 0;
@@ -77,7 +95,9 @@ namespace gameproject
                 var rectPoint = new Point(optionRect.X, optionRect.Y + drawingYOffset); //top left of the rectangle
                 if (option.Value) {
                     drawLater = new Rectangle(optionRect.X, optionRect.Y + drawingYOffset, optionRect.Width, optionRect.Height);
-                } else {
+                }
+                else
+                {
                     g.DrawRectangle(Pens.White, rectPoint.X, rectPoint.Y, optionRect.Width, optionRect.Height);
                 }
                 g.DrawString(option.Key, GameForm.font, Brushes.White, optionRect.X, rectPoint.Y);
@@ -91,5 +111,6 @@ namespace gameproject
             g.DrawImage(scaledSprite, GameForm.windowWidth/2-150, GameForm.windowHeight/2-150);
             scaledSprite.Dispose();
         }
+
     }
 }

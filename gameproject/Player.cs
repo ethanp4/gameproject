@@ -16,10 +16,14 @@ namespace gameproject
         const double critRateLevelMultiplier = 1.01;
         const double healthLevelMultiplier = 1.2;
         const double attackLevelMultiplier = 1.2;
-        public static int health = baseHealth;
         public static int attack = baseAttack;
         public static int xp = 2;
         public static int canadianDollars = 0;
+        public static int baseMaxMP = 100;
+
+        public static int health = getMaxHealth(); // Start with max HP
+        public static int maxMP = baseMaxMP; // Fixed max MP (or make it dynamic if needed)
+        public static int MP = maxMP;
 
         public static int getMaxHealth() {
             return (int)(baseHealth * calculateLevel() * healthLevelMultiplier);
