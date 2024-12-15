@@ -103,9 +103,109 @@ namespace gameproject.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] AttackSound {
+            get {
+                object obj = ResourceManager.GetObject("AttackSound", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] BattleTheme {
+            get {
+                object obj = ResourceManager.GetObject("BattleTheme", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] Blackjack_theme {
             get {
                 object obj = ResourceManager.GetObject("Blackjack theme", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] BlizzardSound {
+            get {
+                object obj = ResourceManager.GetObject("BlizzardSound", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] EnvironmentTheme {
+            get {
+                object obj = ResourceManager.GetObject("EnvironmentTheme", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] FX003_01 {
+            get {
+                object obj = ResourceManager.GetObject("FX003_01", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] FX003_02 {
+            get {
+                object obj = ResourceManager.GetObject("FX003_02", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] FX003_03 {
+            get {
+                object obj = ResourceManager.GetObject("FX003_03", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] FX003_04 {
+            get {
+                object obj = ResourceManager.GetObject("FX003_04", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] FX003_05 {
+            get {
+                object obj = ResourceManager.GetObject("FX003_05", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] HealSound {
+            get {
+                object obj = ResourceManager.GetObject("HealSound", resourceCulture);
                 return ((byte[])(obj));
             }
         }

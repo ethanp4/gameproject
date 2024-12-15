@@ -136,4 +136,34 @@
   <data name="Attack-4" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\A200-4.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="FX003_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FX003_01.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="FX003_02" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FX003_02.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="FX003_03" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FX003_03.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="FX003_04" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FX003_04.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="FX003_05" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FX003_05.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="BattleTheme" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BattleTheme.wav;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="BlizzardSound" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BlizzardSound.wav;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="AttackSound" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AttackSound.wav;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="EnvironmentTheme" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EnvironmentTheme.wav;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="HealSound" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\HealSound.wav;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>
