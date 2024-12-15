@@ -10,7 +10,7 @@ namespace gameproject
     internal class BattleUI
     {
         private Dictionary<string, bool> options = new() { { "Attack", true }, { "Skill", false }, { "Defend", false }, { "Run", false } };
-        private Dictionary<string, bool> skillsMenu = new() { { "Heal", true } }; // Submenu for skills
+        private Dictionary<string, bool> skillsMenu = new() { { "Heal", true }, { "Blizzard", false } }; // Submenu for skills
         private bool isInSkillsMenu = false; // Tracks if the player is in the Skills submenu
         private Rectangle optionRect = new((int)(GameForm.windowWidth * 0.75), (int)(GameForm.windowHeight * 0.75), 90, 30);
         private int optionIndex = 0;
@@ -118,6 +118,18 @@ namespace gameproject
                 if (Player.MP >= 5)
                 {
                     BattleHandler.instance.playerChoice("Heal");
+                }
+                else
+                {
+                    ActionLog.appendAction("Not enough MP!", ActionLog.COLORS.SYSTEM);
+                }
+                isInSkillsMenu = false; // Return to the main menu
+            }
+            else if (skill == "Blizzard")
+            {
+                if (Player.MP >= 10)
+                {
+                    BattleHandler.instance.playerChoice("Blizzard");
                 }
                 else
                 {
