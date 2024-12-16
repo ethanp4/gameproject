@@ -26,6 +26,7 @@ namespace gameproject {
             timer.Tick += invalidateTimer; //on Invalidate(), OnPaint is called automatically, which redraws the frame and handles game state
             timer.Start();
 
+            BattleHandler.initThemes(); //battle handler is handling bgm since there are only two states 
             //MouseClick += (sender, e) => { ActionLog.appendAction($"Click at {mPos.X}, {mPos.Y}", ActionLog.COLORS.SYSTEM); };
         }
 

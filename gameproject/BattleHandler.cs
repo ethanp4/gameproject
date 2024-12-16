@@ -10,34 +10,40 @@ namespace gameproject
     {
         public static BattleHandler instance { get; private set; }
 
-        public BaseEnemy enemy;
+        public BaseEnemy enemy; //reference to the current enemy
 
         public bool playerTurn = true;
         private bool playerDefending = false;
         public static Random random = new();
 
         private static WaveOutEvent battleThemePlayer = new(); // Battle theme music player
-        private static WaveOutEvent soundEffectPlayer; // Sound effect player
+        private static WaveOutEvent soundEffectPlayer = new(); // Sound effect player
         private static MemoryStream battleThemeStream = new MemoryStream(Properties.Resources.BattleTheme);
         private static MemoryStream attackSoundStream = new MemoryStream(Properties.Resources.AttackSound);
         private static MemoryStream blizzardSoundStream = new MemoryStream(Properties.Resources.BlizzardSound);
         private static MemoryStream healSoundStream = new MemoryStream(Properties.Resources.HealSound);
+        private static MemoryStream environmentStream = new(Properties.Resources.EnvironmentTheme);
+        private static WaveFileReader environmentReader = new(environmentStream);
+        private static WaveFileReader battleThemeReader = new(battleThemeStream);
+        private static WaveOutEvent environmentThemePlayer = new();
+
 
         enum END_STATE { WIN, LOSS, RAN_AWAY };
-
-        private static WaveFileReader battleThemeReader = new(battleThemeStream);
-        static BattleHandler() {
+        public static void initThemes() {
             battleThemePlayer.Init(battleThemeReader);
+            environmentThemePlayer.Init(environmentReader);
+            environmentThemePlayer.Play();
         }
+
         public static void initBattle() //using this function as opposed to the constructor to make it the setting of other game states more explicit maybe
         {                               //only one battlehandler and one battleui will exist at a time
-            
             instance = new();
             var enemy = new Snowman(Player.calculateLevel());//these options will be randomly rolled from within here in the future
             instance.enemy = enemy;
             BattleUI.instance = new();
 
             //battleThemeStream.Position = 0;
+            environmentThemePlayer.Pause();
             battleThemePlayer.Play(); // Play the battle theme in a loop
 
             ActionLog.appendAction($"Battle started with {enemy}", ActionLog.COLORS.SYSTEM);
@@ -162,9 +168,9 @@ namespace gameproject
             playerTurn = true;
         }
 
-        private void endBattle(END_STATE result) { 
-        
+        private void endBattle(END_STATE result) {
             battleThemePlayer?.Stop(); // stops the battle theme
+            environmentThemePlayer.Play();
 
             switch (result) { 
             

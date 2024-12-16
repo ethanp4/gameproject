@@ -13,28 +13,12 @@ namespace gameproject
         const int width = GameForm.windowWidth;
         const int height = GameForm.windowHeight;
 
-        //unused for now
-        //private static Dictionary<int, double[]> dirSteps = new() {
-        //    { 0, new[]{ 0.0, 1.0 } },
-        //    { 1, new[]{ 1.0, 0.0 } },
-        //    { 2, new[]{ 0.0, -1.0} },
-        //    { 3, new[]{ -1.0, 0.0} },
-        //};
-        //private static Dictionary<int, double[]> planeSteps = new() {
-        //    { 0, new[]{ 0.66, 0.0 } },
-        //    { 1, new[]{ 0.0, -0.66 } },
-        //    { 2, new[]{ -0.66, 0.0} },
-        //    { 3, new[]{ 0.0, 0.66} },
-        //};
-
-
-        //public static double posX = 21.5, posY = 11.5;  //x and y start position, only ever modified by +/- 1
         public static double dirX = 0, dirY = 1; //initial direction vector
         public static double planeX = 0.66, planeY = 0; //the 2d raycaster version of camera plane
 
         static double time = 0; //time of current frame
         static double oldTime = 0; //time of previous frame
-        //setup rotation
+        //setup rotation animation
         private static System.Windows.Forms.Timer rotationTimer = new();
         static Game()
         {
@@ -42,7 +26,6 @@ namespace gameproject
             rotationTimer.Tick += rotationAnim;
 
         }
-        //private static double rotationAnimLength = 0.5;
         private static bool rotationDir = false;
         private static int rotationSteps = 10; //one step is 1/rotationSteps of the entire rotation and happens each frame
         private static int rotationStepProgress = 0;
@@ -86,33 +69,32 @@ namespace gameproject
             { 1,0,0,0,0,0,2,2,0,0,0,0,2,0,0,0,0,0,-1,1 },
             { 1,1,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,1,1,1 },
             { 1,1,0,0,0,0,2,2,0,0,0,0,2,0,0,0,0,1,1,1 },
-            { 1,1,1,0,0,0,2,0,2,2,2,2,2,0,0,0,1,1,1,1 },
+            { 1,1,1,0,0,0,2,2,2,2,2,2,2,0,0,0,1,1,1,1 },
             { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 }},
             new[,]{ //stage 3
             { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
-            { 1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1 },
-            { 1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1 },
-            { 1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1 },
-            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,1 },
-            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,1 },
-            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,1 },
-            { 1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1 },
-            { 1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1 },
-            { 1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1 },
+            { 1,1,1,0,0,0,0,2,0,0,0,2,0,2,0,0,1,1,1,1 },
+            { 1,1,0,0,0,0,0,0,0,2,0,0,2,0,0,0,0,1,1,1 },
+            { 1,1,0,0,0,0,0,2,0,0,0,2,0,2,0,0,0,1,1,1 },
+            { 1,0,0,0,0,0,0,0,0,2,0,2,0,0,0,0,0,0,-1,1 },
+            { 1,0,0,0,0,0,0,2,0,0,0,2,0,2,0,0,0,0,-1,1 },
+            { 1,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,-1,1 },
+            { 1,1,0,0,0,0,0,2,0,0,0,2,0,2,0,0,0,1,1,1 },
+            { 1,1,0,0,0,0,0,0,0,2,0,2,0,0,0,0,0,1,1,1 },
+            { 1,1,1,0,0,0,0,2,0,0,0,0,0,2,0,0,1,1,1,1 },
             { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 }},
             new[,]{ //stage 4
             { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
-            { 1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1 },
-            { 1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1 },
-            { 1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1 },
-            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,1 },
-            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,1 },
-            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,1 },
-            { 1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1 },
-            { 1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1 },
-            { 1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1 },
+            { 1,1,1,0,0,0,0,2,2,2,0,0,0,0,2,0,1,1,1,1 },
+            { 1,1,0,0,0,0,0,0,0,2,0,0,0,0,2,0,0,1,1,1 },
+            { 1,1,0,0,0,0,0,2,0,2,2,0,0,0,2,2,2,1,1,1 },
+            { 1,0,0,0,0,0,0,0,0,2,2,2,0,0,0,0,0,0,-1,1 },
+            { 1,0,0,0,0,0,0,2,0,2,0,2,0,0,0,0,0,0,-1,1 },
+            { 1,0,0,0,0,0,0,0,0,2,0,2,0,0,2,0,0,0,-1,1 },
+            { 1,1,0,0,0,0,0,2,0,2,2,0,0,2,0,0,0,1,1,1 },
+            { 1,1,0,0,0,0,0,2,0,0,0,0,2,0,0,0,0,1,1,1 },
+            { 1,1,1,0,0,0,0,2,0,2,2,2,0,0,0,0,1,1,1,1 },
             { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 }},
-
         };
 
         private static Color[][] stageColors = new Color[][]
@@ -168,7 +150,6 @@ namespace gameproject
             gameState = STATE.FREE_MOVEMENT;
             posX = spawnX; posY = spawnY;
             Player.reset();
-
         }
 
         public static int currentStage { get; private set; } = 0; //can be read by ui class
@@ -240,17 +221,18 @@ namespace gameproject
         }
 
         private static void moveToNextRoom() {
-            currentStage++;
+            if (currentStage == worldMaps.Length-1) {
+                gameState = STATE.YOU_WIN;
+                ImportantMessageText.setMessage("You win!\nPress enter to restart", 99999);
+            } else {
+                currentStage++;
+                posX = spawnX; posY = spawnY;
+            }
             //if (currentStage == 2) {
             //    gameState = STATE.IN_SHOP;
             //    ActionLog.appendAction("You entered the shop!", ActionLog.COLORS.SPECIAL);
             //    Shop.instance = new Shop(); //create new shop instance, from here it could be possible to make stage specific shop contents and stuff
             //}
-            if (currentStage == worldMaps.Length) {
-                gameState = STATE.YOU_WIN;
-                ImportantMessageText.setMessage("You win!\nPress enter to restart", 99999);
-            }
-            posX = spawnX; posY = spawnY;
         }
         static Random random = new Random();
         public static void considerSpawningEnemy()
