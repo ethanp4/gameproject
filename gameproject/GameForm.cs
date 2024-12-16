@@ -55,7 +55,7 @@ namespace gameproject {
                     break;
             }
             UI.drawPlayerBars(g);
-            UI.drawMinimap(g, windowWidth, windowHeight);
+            //UI.drawMinimap(g, windowWidth, windowHeight);
             ActionLog.drawLog(g);
             ImportantMessageText.updateImportantMessageText(g);
             AnimationPlayer.updateAnimations(DateTime.Now, g);

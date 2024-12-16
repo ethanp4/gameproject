@@ -16,15 +16,19 @@ namespace gameproject
         private bool playerDefending = false;
         public static Random random = new();
 
-        private static WaveOutEvent battleThemePlayer; // Battle theme music player
+        private static WaveOutEvent battleThemePlayer = new(); // Battle theme music player
         private static WaveOutEvent soundEffectPlayer; // Sound effect player
-        private static MemoryStream battleThemeStream;
-        private static MemoryStream attackSoundStream;
-        private static MemoryStream blizzardSoundStream;
-        private static MemoryStream healSoundStream;
+        private static MemoryStream battleThemeStream = new MemoryStream(Properties.Resources.BattleTheme);
+        private static MemoryStream attackSoundStream = new MemoryStream(Properties.Resources.AttackSound);
+        private static MemoryStream blizzardSoundStream = new MemoryStream(Properties.Resources.BlizzardSound);
+        private static MemoryStream healSoundStream = new MemoryStream(Properties.Resources.HealSound);
 
         enum END_STATE { WIN, LOSS, RAN_AWAY };
 
+        private static WaveFileReader battleThemeReader = new(battleThemeStream);
+        static BattleHandler() {
+            battleThemePlayer.Init(battleThemeReader);
+        }
         public static void initBattle() //using this function as opposed to the constructor to make it the setting of other game states more explicit maybe
         {                               //only one battlehandler and one battleui will exist at a time
             
@@ -33,20 +37,11 @@ namespace gameproject
             instance.enemy = enemy;
             BattleUI.instance = new();
 
-            
-            battleThemeStream = new MemoryStream(Properties.Resources.BattleTheme);
-            var battleThemeReader = new WaveFileReader(battleThemeStream);
-            battleThemePlayer = new WaveOutEvent();
-            battleThemePlayer.Init(battleThemeReader);
+            //battleThemeStream.Position = 0;
             battleThemePlayer.Play(); // Play the battle theme in a loop
 
             ActionLog.appendAction($"Battle started with {enemy}", ActionLog.COLORS.SYSTEM);
             Game.gameState = Game.STATE.BATTLE;
-
-            // Prepare sound effect streams
-            attackSoundStream = new MemoryStream(Properties.Resources.AttackSound);
-            blizzardSoundStream = new MemoryStream(Properties.Resources.BlizzardSound);
-            healSoundStream = new MemoryStream(Properties.Resources.HealSound);
         }
 
         private static Image[] attackImages = {
