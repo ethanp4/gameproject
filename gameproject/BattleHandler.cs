@@ -33,6 +33,8 @@ namespace gameproject
             battleThemePlayer.Init(battleThemeReader);
             environmentThemePlayer.Init(environmentReader);
             environmentThemePlayer.Play();
+            battleThemePlayer.PlaybackStopped += (sender, e) => { battleThemePlayer.Play(); };
+            environmentThemePlayer.PlaybackStopped += (sender, e) => { environmentThemePlayer.Play(); };
         }
 
         public static void initBattle() //using this function as opposed to the constructor to make it the setting of other game states more explicit maybe
@@ -44,7 +46,7 @@ namespace gameproject
 
             //battleThemeStream.Position = 0;
             environmentThemePlayer.Pause();
-            battleThemePlayer.Play(); // Play the battle theme in a loop
+            battleThemePlayer.Play(); 
 
             ActionLog.appendAction($"Battle started with {enemy}", ActionLog.COLORS.SYSTEM);
             Game.gameState = Game.STATE.BATTLE;
@@ -169,7 +171,7 @@ namespace gameproject
         }
 
         private void endBattle(END_STATE result) {
-            battleThemePlayer?.Stop(); // stops the battle theme
+            battleThemePlayer.Pause(); // pause the battle theme
             environmentThemePlayer.Play();
 
             switch (result) { 
