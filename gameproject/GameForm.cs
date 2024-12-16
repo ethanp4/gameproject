@@ -15,24 +15,25 @@ namespace gameproject {
 
         public GameForm() {
             InitializeComponent();
-            AutoScaleMode = AutoScaleMode.Dpi;
-            DoubleBuffered = true;
+            AutoScaleMode = AutoScaleMode.Dpi; //no more blurry sprites
+            DoubleBuffered = true; //no flickering
             Width = windowWidth;
             Height = windowHeight;
-            FormBorderStyle = FormBorderStyle.FixedSingle;
+            FormBorderStyle = FormBorderStyle.FixedSingle; //no maximise button
             MaximizeBox = false;
 
             timer.Interval = (int)Math.Floor(1f / (float)framerate * 1000f); // frametime for 60 fps
-            timer.Tick += invalidateTimer;
+            timer.Tick += invalidateTimer; //on Invalidate(), OnPaint is called automatically, which redraws the frame and handles game state
             timer.Start();
 
-            MouseClick += (sender, e) => { ActionLog.appendAction($"Click at {mPos.X}, {mPos.Y}", ActionLog.COLORS.SYSTEM); };
+            //MouseClick += (sender, e) => { ActionLog.appendAction($"Click at {mPos.X}, {mPos.Y}", ActionLog.COLORS.SYSTEM); };
         }
 
         private void invalidateTimer(object sender, EventArgs e) {
             Invalidate(); //repaint once every 16 ms for 60 fps
         }
 
+        //main game loop
         protected override void OnPaint(PaintEventArgs e) {
             var g = e.Graphics; // graphics object to draw with
             
@@ -43,7 +44,6 @@ namespace gameproject {
                     UI.drawUI(g);
                     break;
                 case Game.STATE.BATTLE:
-                    BattleUI.instance.drawUI(g);
                     BattleUI.instance.drawUI(g);
                     break;
                 case Game.STATE.GAME_OVER: //nothing to draw since ImportantMessageText is used elsewhere (line 243 game.cs and line 110 battlehandler.cs)
@@ -61,11 +61,14 @@ namespace gameproject {
             AnimationPlayer.updateAnimations(DateTime.Now, g);
         }
 
+        //mouse pointer location just or debugging
         private void formMouseMove(object sender, MouseEventArgs e) {
-            mPos = e.Location; //this needs to be set from here in order to get the local position
+            mPos = e.Location;
         }
 
-        private void formKeyDown(object sender, KeyEventArgs e) { //keyboard input handler, this game is keyboard only
+        //keyboard input handler, this game is keyboard only
+        //depending on the game state, input is send to different parts of the program
+        private void formKeyDown(object sender, KeyEventArgs e) { 
             switch (Game.gameState)
             {
                 case Game.STATE.FREE_MOVEMENT:

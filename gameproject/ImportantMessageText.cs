@@ -18,7 +18,7 @@ namespace gameproject
         {
             if (DateTime.Now > endTime) { return; }
             if (currentMessage == "") { return; }
-            g.DrawString(currentMessage, biggerFont, Brushes.Beige, new Point(GameForm.windowWidth / 2, GameForm.windowHeight / 2));
+            g.DrawString(currentMessage, biggerFont, Brushes.Beige, new Point(GameForm.windowWidth / 2 - 250, GameForm.windowHeight / 2 - 100));
         }
 
         public static void clearMessage() {
