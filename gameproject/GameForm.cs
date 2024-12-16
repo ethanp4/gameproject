@@ -21,6 +21,7 @@ namespace gameproject {
             Height = windowHeight;
             FormBorderStyle = FormBorderStyle.FixedSingle; //no maximise button
             MaximizeBox = false;
+            Text = "Ultimate Delusion";
 
             timer.Interval = (int)Math.Floor(1f / (float)framerate * 1000f); // frametime for 60 fps
             timer.Tick += invalidateTimer; //on Invalidate(), OnPaint is called automatically, which redraws the frame and handles game state
